@@ -1,39 +1,7 @@
-@use '../../styles/mixins' as *;
 @use '../../styles/tokens' as *;
 
 .field {
   display: flex;
   flex-direction: column;
   gap: $space-2;
-}
-
-.label {
-  @include field-label;
-}
-
-.required {
-  color: $color-error;
-}
-
-.input {
-  @include field-control;
-
-  &[aria-invalid='true'] {
-    @include field-control-invalid;
-  }
-}
-
-.helper,
-.error {
-  margin: 0;
-  font-size: $font-size-helper;
-  line-height: 1.5;
-}
-
-.helper {
-  color: $color-text-secondary;
-}
-
-.error {
-  color: $color-error;
 }
