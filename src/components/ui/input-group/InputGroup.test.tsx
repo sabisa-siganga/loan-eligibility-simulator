@@ -1,12 +1,7 @@
 import { cleanup, render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { afterEach, describe, expect, it } from 'vitest';
-import {
-  InputGroup,
-  InputGroupAddon,
-  InputGroupInput,
-  InputGroupText,
-} from './InputGroup';
+import { InputGroup, InputGroupAddon, InputGroupInput, InputGroupText } from './InputGroup';
 import styles from './InputGroup.module.scss';
 
 afterEach(() => {
@@ -40,10 +35,7 @@ describe('InputGroup', () => {
 
     const group = container.querySelector('[data-slot="input-group"]');
     expect(group).toHaveClass(styles.group);
-    expect(screen.getByRole('textbox', { name: 'Amount' })).toHaveAttribute(
-      'aria-invalid',
-      'true',
-    );
+    expect(screen.getByRole('textbox', { name: 'Amount' })).toHaveAttribute('aria-invalid', 'true');
   });
 
   it('keeps focus on the input control inside the group', async () => {

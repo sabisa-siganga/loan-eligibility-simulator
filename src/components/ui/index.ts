@@ -6,12 +6,7 @@ export { ErrorText } from './error-text';
 export type { ErrorTextProps } from './error-text';
 export { Input } from './input';
 export type { InputProps } from './input';
-export {
-  InputGroup,
-  InputGroupAddon,
-  InputGroupInput,
-  InputGroupText,
-} from './input-group';
+export { InputGroup, InputGroupAddon, InputGroupInput, InputGroupText } from './input-group';
 export type {
   InputGroupAddonAlign,
   InputGroupAddonProps,

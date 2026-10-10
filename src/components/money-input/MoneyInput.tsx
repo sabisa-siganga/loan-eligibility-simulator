@@ -9,15 +9,9 @@ import {
 } from '../../utils/formatMoney';
 import { ErrorText } from '../ui/error-text';
 import { HelperText } from '../ui/helper-text';
-import {
-  InputGroup,
-  InputGroupAddon,
-  InputGroupInput,
-  InputGroupText,
-} from '../ui/input-group';
+import { InputGroup, InputGroupAddon, InputGroupInput, InputGroupText } from '../ui/input-group';
 import { Label } from '../ui/label';
 import styles from './MoneyInput.module.scss';
-
 
 type MoneyInputProps = {
   label: string;

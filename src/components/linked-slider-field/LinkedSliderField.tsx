@@ -9,16 +9,10 @@ import {
 } from '../../utils/formatMoney';
 import { ErrorText } from '../ui/error-text';
 import { Input } from '../ui/input';
-import {
-  InputGroup,
-  InputGroupAddon,
-  InputGroupInput,
-  InputGroupText,
-} from '../ui/input-group';
+import { InputGroup, InputGroupAddon, InputGroupInput, InputGroupText } from '../ui/input-group';
 import { Label } from '../ui/label';
 import { Slider } from '../ui/slider';
 import styles from './LinkedSliderField.module.scss';
-
 
 type LinkedSliderFieldProps = {
   label: string;
@@ -187,7 +181,6 @@ const LinkedSliderField = forwardRef<HTMLInputElement, LinkedSliderFieldProps>(
         ) : (
           <Input ref={ref} {...inputProps} />
         )}
-
 
         <div className={styles.sliderRow}>
           <Slider

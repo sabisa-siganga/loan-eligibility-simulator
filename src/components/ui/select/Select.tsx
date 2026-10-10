@@ -68,8 +68,9 @@ export const Select = forwardRef<HTMLSelectElement, SelectProps>(
             value={value}
             aria-invalid={error ? true : undefined}
             aria-describedby={
-              [showHelperText ? helperId : null, error ? errorId : null].filter(Boolean).join(' ') ||
-              undefined
+              [showHelperText ? helperId : null, error ? errorId : null]
+                .filter(Boolean)
+                .join(' ') || undefined
             }
             aria-required={required || undefined}
             onChange={handleChange}
