@@ -24,10 +24,7 @@ const App = () => {
 
   return (
     <div className={styles.app}>
-      <AppHeader
-        ref={howItWorksButtonRef}
-        onOpenHowItWorks={() => setIsHowItWorksOpen(true)}
-      />
+      <AppHeader ref={howItWorksButtonRef} onOpenHowItWorks={() => setIsHowItWorksOpen(true)} />
       <ProgressStepper currentScreen={currentScreen} />
       <main className={styles.main}>
         {currentScreen === JOURNEY_SCREENS.loanDetails ? <LoanDetailsScreen /> : null}

@@ -64,7 +64,9 @@ const SelectField = forwardRef<HTMLSelectElement, SelectFieldProps>(
             ref={ref}
             id={selectId}
             name={name}
-            className={[styles.select, value === '' ? styles.placeholder : ''].filter(Boolean).join(' ')}
+            className={[styles.select, value === '' ? styles.placeholder : '']
+              .filter(Boolean)
+              .join(' ')}
             value={value}
             aria-invalid={error ? true : undefined}
             aria-describedby={
