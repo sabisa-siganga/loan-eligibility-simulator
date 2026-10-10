@@ -8,7 +8,7 @@ import { Button } from '../../components/ui/button';
 import { Checkbox } from '../../components/ui/checkbox';
 import { Select } from '../../components/ui/select';
 import WholeNumberInput from '../../components/whole-number-input';
-import { checkEligibility } from '../../services/eligibility';
+import { checkEligibility, ELIGIBILITY_CHECK_FAILED_MESSAGE } from '../../services/eligibility';
 import { useAppDispatch, useAppSelector } from '../../store/hooks';
 import {
   eligibilityFailed,
@@ -232,7 +232,7 @@ const YourBudgetScreen = () => {
       dispatch(
         eligibilityFailed({
           requestId: nextRequestId,
-          message: 'We could not check eligibility. Please try again.',
+          message: ELIGIBILITY_CHECK_FAILED_MESSAGE,
         }),
       );
     }

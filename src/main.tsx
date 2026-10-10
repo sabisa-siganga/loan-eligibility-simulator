@@ -14,10 +14,26 @@ if (!rootElement) {
   throw new Error('Root element #root was not found');
 }
 
-createRoot(rootElement).render(
-  <StrictMode>
-    <Provider store={store}>
-      <App />
-    </Provider>
-  </StrictMode>,
-);
+const enableMockApi = async () => {
+  if (import.meta.env.VITE_ENABLE_MOCK_API !== 'true') {
+    return;
+  }
+
+  const { worker } = await import('./mocks/browser');
+  await worker.start({
+    onUnhandledRequest: 'bypass',
+    quiet: true,
+  });
+};
+
+const renderApp = () => {
+  createRoot(rootElement).render(
+    <StrictMode>
+      <Provider store={store}>
+        <App />
+      </Provider>
+    </StrictMode>,
+  );
+};
+
+void enableMockApi().then(renderApp);
