@@ -2,6 +2,7 @@ import { createSlice } from '@reduxjs/toolkit';
 import type { PayloadAction } from '@reduxjs/toolkit';
 import type { BudgetDraft, SubmittedBudget } from '../types/budget';
 import type { SubmittedLoanDetails } from '../types/loan';
+import { mapSubmittedBudgetToDraft } from '../utils/mapSubmittedBudgetToDraft';
 
 export const JOURNEY_SCREENS = {
   loanDetails: 'loanDetails',
@@ -94,6 +95,25 @@ const journeySlice = createSlice({
       state.eligibilityStatus = 'failed';
       state.eligibilityError = action.payload.message;
     },
+    updateSubmittedLoanDetails: (
+      state,
+      action: PayloadAction<{ amount: number; termMonths: number }>,
+    ) => {
+      if (!state.submittedLoanDetails) {
+        return;
+      }
+      state.submittedLoanDetails.amount = action.payload.amount;
+      state.submittedLoanDetails.termMonths = action.payload.termMonths;
+    },
+    editBudgetDetails: (state) => {
+      if (!state.submittedBudget) {
+        return;
+      }
+      state.budgetDraft = mapSubmittedBudgetToDraft(state.submittedBudget);
+      state.currentScreen = JOURNEY_SCREENS.yourBudget;
+      state.eligibilityStatus = 'idle';
+      state.eligibilityError = null;
+    },
     resetJourney: () => initialJourneyState,
   },
 });
@@ -106,6 +126,8 @@ export const {
   submitBudgetAndStartCheck,
   eligibilitySucceeded,
   eligibilityFailed,
+  updateSubmittedLoanDetails,
+  editBudgetDetails,
   resetJourney,
 } = journeySlice.actions;
 
