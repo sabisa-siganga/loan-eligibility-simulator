@@ -152,13 +152,16 @@
   font-weight: 400;
   line-height: 1.5;
   text-align: left;
-  transition: border-color $duration-color ease;
+  transition:
+    border-color $duration-color ease,
+    box-shadow $duration-color ease;
 
   @include respond-below($bp-fields) {
     font-size: $font-size-field-mobile;
   }
 
-  &:hover:not(:disabled):not(:read-only) {
+  // Exclude :focus so hover's extra :not() specificity cannot override focus border.
+  &:hover:not(:disabled):not(:read-only):not(:focus) {
     border-color: $color-input-hover-border;
   }
 
@@ -167,7 +170,9 @@
   }
 
   &:focus-visible {
-    @include focus-ring;
+    outline: none;
+    border-color: $color-primary;
+    box-shadow: 0 0 0 $focus-ring-width $focus-ring-color;
   }
 
   &:disabled {
@@ -185,9 +190,18 @@
 @mixin field-control-invalid {
   border-color: $color-error-border;
 
-  &:focus,
-  &:focus-visible {
+  &:hover:not(:disabled):not(:read-only):not(:focus) {
     border-color: $color-error-border;
+  }
+
+  &:focus {
+    border-color: $color-error-border;
+  }
+
+  &:focus-visible {
+    outline: none;
+    border-color: $color-error-border;
+    box-shadow: 0 0 0 $focus-ring-width $focus-ring-color-invalid;
   }
 }
 

@@ -90,9 +90,12 @@ $bp-fields: 640px;
 $bp-stack: 960px;
 
 // Focus
-$focus-outline-width: 2px;
-$focus-outline-offset: 3px;
+$focus-outline-width: 1px;
+$focus-outline-offset: 2px;
 $focus-outline-color: $color-primary-pressed;
+$focus-ring-width: 3px;
+$focus-ring-color: rgba($color-primary, 0.35);
+$focus-ring-color-invalid: rgba($color-error, 0.25);
 
 // Motion
 $duration-color: 150ms;
@@ -201,6 +204,9 @@ $duration-highlight: 250ms;
 
     --focus-outline-width: #{$focus-outline-width};
     --focus-outline-offset: #{$focus-outline-offset};
+    --focus-ring-width: #{$focus-ring-width};
+    --focus-ring-color: #{$focus-ring-color};
+    --focus-ring-color-invalid: #{$focus-ring-color-invalid};
 
     --duration-color: #{$duration-color};
     --duration-reveal: #{$duration-reveal};
