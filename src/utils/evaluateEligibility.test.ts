@@ -99,4 +99,35 @@ describe('evaluateEligibility', () => {
 
     expect(result.failures.some((failure) => failure.code === 'incomeDuration')).toBe(true);
   });
+
+  it('fails employed users below the minimum employment duration', () => {
+    const result = evaluateEligibility({
+      budget: baseBudget({ employmentDurationMonths: 2 }),
+      monthlyRepayment: 500,
+    });
+
+    expect(result.failures.some((failure) => failure.code === 'employmentDuration')).toBe(true);
+  });
+
+  it('fails self-employed users below the minimum business duration', () => {
+    const result = evaluateEligibility({
+      budget: baseBudget({
+        employmentStatus: 'selfEmployed',
+        employmentDurationMonths: null,
+        businessDurationMonths: 1,
+      }),
+      monthlyRepayment: 500,
+    });
+
+    expect(result.failures.some((failure) => failure.code === 'businessDuration')).toBe(true);
+  });
+
+  it('fails income below the minimum when the user has some income', () => {
+    const result = evaluateEligibility({
+      budget: baseBudget({ monthlyIncome: 500 }),
+      monthlyRepayment: 100,
+    });
+
+    expect(result.failures.some((failure) => failure.code === 'minIncome')).toBe(true);
+  });
 });

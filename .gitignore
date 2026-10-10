@@ -36,3 +36,4 @@ playwright/.cache
 *.tsbuildinfo
 .eslintcache
 /docs/superpowers
+.worktrees

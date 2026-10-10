@@ -1,9 +1,13 @@
 import type { Page } from '@playwright/test';
 import { MOCK_ELIGIBILITY_FAIL_STORAGE_KEY } from '../../src/mocks/constants';
 
-export const continueToBudgetWithPurpose = async (page: Page) => {
+export const openLoanDetails = async (page: Page) => {
   await page.goto('/');
   await page.getByTestId('loan-details-screen').waitFor();
+};
+
+export const continueToBudgetWithPurpose = async (page: Page) => {
+  await openLoanDetails(page);
   await page.getByLabel(/Loan purpose/i).selectOption({ label: 'Debt consolidation' });
   await page.getByRole('button', { name: /Continue to your budget/i }).click();
   await page.getByTestId('your-budget-screen').waitFor();

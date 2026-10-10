@@ -3,6 +3,7 @@ import {
   formatMoneyDisplay,
   formatMoneyInputBlur,
   formatMoneyInputFocus,
+  formatTermLabel,
   isWholeRandDigitString,
   parseWholeRandDigits,
   sanitizeMoneyPaste,
@@ -24,6 +25,7 @@ describe('formatMoney', () => {
     expect(parseWholeRandDigits('')).toBeNull();
     expect(parseWholeRandDigits('50.00')).toBeNull();
     expect(parseWholeRandDigits('R5000')).toBeNull();
+    expect(parseWholeRandDigits(String(Number.MAX_SAFE_INTEGER + 1))).toBeNull();
     expect(isWholeRandDigitString('123')).toBe(true);
     expect(isWholeRandDigitString('12a')).toBe(false);
   });
@@ -35,5 +37,12 @@ describe('formatMoney', () => {
     });
     expect(sanitizeMoneyPaste('25000')).toEqual({ ok: true, digits: '25000' });
     expect(sanitizeMoneyPaste('25000.00')).toEqual({ ok: true, digits: '25000' });
+    expect(sanitizeMoneyPaste('R 25,000')).toEqual({ ok: true, digits: '25000' });
+    expect(sanitizeMoneyPaste('R 25,000.00')).toEqual({ ok: true, digits: '25000' });
+  });
+
+  it('labels a one-month term in the singular', () => {
+    expect(formatTermLabel(1)).toBe('1 month');
+    expect(formatTermLabel(6)).toBe('6 months');
   });
 });
