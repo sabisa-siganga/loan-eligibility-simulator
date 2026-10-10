@@ -32,14 +32,21 @@ const seedLoanAndOpenBudget = () => {
   return { store, user };
 };
 
-const fillRequiredEmployedFields = async (user: ReturnType<typeof userEvent.setup>) => {
+const getAgeInput = () => screen.getByRole('spinbutton', { name: /Age \(years\)/i });
+
+const fillRequiredEmployedFields = async (
+  user: ReturnType<typeof userEvent.setup>,
+  { age = '35' }: { age?: string } = {},
+) => {
   await user.type(screen.getByRole('textbox', { name: /Monthly take-home income/i }), '15000');
   await user.type(screen.getByRole('textbox', { name: /Monthly living expenses/i }), '10000');
   await user.type(
     screen.getByRole('textbox', { name: /Existing monthly debt repayments/i }),
     '1800',
   );
-  await user.type(screen.getByRole('textbox', { name: /Age \(years\)/i }), '35');
+  if (age !== '') {
+    await user.type(getAgeInput(), age);
+  }
   await user.selectOptions(screen.getByLabelText(/Employment status/i), 'employed');
   await user.type(screen.getByRole('textbox', { name: /Employment duration \(months\)/i }), '24');
 };
@@ -95,23 +102,77 @@ describe('YourBudgetScreen', () => {
     expect(screen.getByLabelText(/Check my credit score/i)).toBeInTheDocument();
   });
 
+  it('shows the age range error when age is below 18 and stays on the budget screen', async () => {
+    const checkSpy = vi.spyOn(eligibilityService, 'checkEligibility');
+    const { user } = seedLoanAndOpenBudget();
+
+    await fillRequiredEmployedFields(user, { age: '17' });
+    await user.type(screen.getByRole('textbox', { name: /^Credit score/i }), '650');
+    await user.click(screen.getByRole('button', { name: /Check estimated eligibility/i }));
+
+    expect(
+      await screen.findByText('You must be between 18 and 65 years old.'),
+    ).toBeInTheDocument();
+    expect(screen.getByTestId('your-budget-screen')).toBeInTheDocument();
+    expect(checkSpy).not.toHaveBeenCalled();
+  });
+
+  it('shows the age range error when age is above 65', async () => {
+    const { user } = seedLoanAndOpenBudget();
+
+    await fillRequiredEmployedFields(user, { age: '66' });
+    await user.type(screen.getByRole('textbox', { name: /^Credit score/i }), '650');
+    await user.click(screen.getByRole('button', { name: /Check estimated eligibility/i }));
+
+    expect(
+      await screen.findByText('You must be between 18 and 65 years old.'),
+    ).toBeInTheDocument();
+    expect(screen.getByTestId('your-budget-screen')).toBeInTheDocument();
+  });
+
+  it('shows Enter your age when age is left empty on submit', async () => {
+    const { user } = seedLoanAndOpenBudget();
+
+    await fillRequiredEmployedFields(user, { age: '' });
+    await user.type(screen.getByRole('textbox', { name: /^Credit score/i }), '650');
+    await user.click(screen.getByRole('button', { name: /Check estimated eligibility/i }));
+
+    expect(await screen.findByText('Enter your age.')).toBeInTheDocument();
+    expect(screen.getByTestId('your-budget-screen')).toBeInTheDocument();
+  });
+
+  it('does not show the age range error when age is 18', async () => {
+    vi.spyOn(eligibilityService, 'checkEligibility').mockResolvedValue({
+      ok: true,
+      requestId: 1,
+    });
+    const { user } = seedLoanAndOpenBudget();
+
+    await fillRequiredEmployedFields(user, { age: '18' });
+    await user.type(screen.getByRole('textbox', { name: /^Credit score/i }), '650');
+    await user.click(screen.getByRole('button', { name: /Check estimated eligibility/i }));
+
+    expect(screen.queryByText('You must be between 18 and 65 years old.')).not.toBeInTheDocument();
+    expect(await screen.findByTestId('your-result-screen')).toBeInTheDocument();
+  });
+
   it('preserves budget draft when going Back and returning', async () => {
     const { user } = seedLoanAndOpenBudget();
 
-    await user.type(screen.getByRole('textbox', { name: /Age \(years\)/i }), '35');
+    await user.type(getAgeInput(), '35');
     await user.click(screen.getByRole('button', { name: /^Back$/i }));
 
     expect(screen.getByTestId('loan-details-screen')).toBeInTheDocument();
     expect(screen.getByRole('textbox', { name: /^Loan amount \(R\)/i })).toHaveValue('50000.00');
 
     await user.click(screen.getByRole('button', { name: /Continue to your budget/i }));
-    expect(screen.getByRole('textbox', { name: /Age \(years\)/i })).toHaveValue('35');
+    expect(getAgeInput()).toHaveValue(35);
   });
 
   it('clears the journey on Cancel and returns to loan defaults', async () => {
     const { store, user } = seedLoanAndOpenBudget();
 
-    await user.type(screen.getByRole('textbox', { name: /Age \(years\)/i }), '35');
+    await user.type(getAgeInput(), '35');
     await user.click(screen.getByRole('button', { name: /^Cancel$/i }));
 
     expect(screen.getByTestId('loan-details-screen')).toBeInTheDocument();

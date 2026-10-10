@@ -140,7 +140,7 @@ describe('YourResultScreen', () => {
     expect(screen.getByRole('textbox', { name: /Monthly take-home income/i })).toHaveValue(
       '15000.00',
     );
-    expect(screen.getByRole('textbox', { name: /Age \(years\)/i })).toHaveValue('35');
+    expect(screen.getByRole('spinbutton', { name: /Age \(years\)/i })).toHaveValue(35);
   });
 
   it('clears the journey on Start again', async () => {
