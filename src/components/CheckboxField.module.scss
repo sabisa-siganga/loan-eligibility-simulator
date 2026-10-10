@@ -1,0 +1,21 @@
+.field {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-2);
+  min-height: var(--control-min-height);
+}
+
+.input {
+  width: 1.1429rem;
+  height: 1.1429rem;
+  min-height: auto;
+  margin-top: 0.2rem;
+  accent-color: var(--color-primary);
+  cursor: pointer;
+}
+
+.label {
+  font-weight: 600;
+  color: var(--color-text);
+  cursor: pointer;
+}

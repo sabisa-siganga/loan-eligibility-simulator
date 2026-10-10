@@ -60,14 +60,6 @@ Cancel, Start again, and a full page reload will clear entered details, results,
 
 Keep financial information out of URLs, logs, and analytics. No secrets or banking credentials belong in this project. Entered details stay on the device for the session; reloading clears them.
 
-## Design references
-
-Selected layout under `documents/` (do not use the later “Plan your personal loan” redesign):
-
-| Screen         | File                                         |
-| -------------- | -------------------------------------------- |
-| 1 Loan details | `ChatGPT Image Oct 9, 2026, 03_52_05 PM.png` |
-
 Confirmed theme tokens (primary `#2F70EF`, Nunito Sans) override sampled colours/fonts from those images.
 
 ## Design decision
@@ -80,4 +72,4 @@ React, Vite, TypeScript (strict), SCSS Modules, Redux Toolkit, React Hook Form, 
 
 ## Current scope
 
-Screen 1 (loan details) is implemented: amount/term/purpose inputs, live repayment estimate with explore-rate control, and continue into the journey. Budget and result screens are not wired yet.
+All three screens are implemented: loan details, budget form with conditionals and credit-score modes, and the eligibility result with adjust / edit / start again. Deferred items (fees, schedule, multi-product, real bureau) remain out of scope.

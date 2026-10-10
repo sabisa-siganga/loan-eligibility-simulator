@@ -40,7 +40,7 @@ describe('App shell', () => {
 
     renderApp(store);
 
-    expect(screen.queryByTestId('loan-details-screen')).not.toBeInTheDocument();
+    expect(screen.getByTestId('your-budget-screen')).toBeInTheDocument();
 
     act(() => {
       store.dispatch(resetJourney());
@@ -59,7 +59,7 @@ describe('App shell', () => {
     act(() => {
       store.dispatch(setCurrentScreen(JOURNEY_SCREENS.yourResult));
     });
-    expect(screen.queryByTestId('loan-details-screen')).not.toBeInTheDocument();
+    expect(screen.getByTestId('your-result-screen')).toBeInTheDocument();
 
     act(() => {
       store.dispatch(resetJourney());

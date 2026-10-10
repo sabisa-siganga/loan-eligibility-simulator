@@ -3,6 +3,8 @@ import AppHeader from './components/AppHeader';
 import HowItWorksDialog from './components/HowItWorksDialog';
 import ProgressStepper from './components/ProgressStepper';
 import LoanDetailsScreen from './screens/LoanDetailsScreen';
+import YourBudgetScreen from './screens/YourBudgetScreen';
+import YourResultScreen from './screens/YourResultScreen';
 import { useAppSelector } from './store/hooks';
 import { JOURNEY_SCREENS } from './store/journeySlice';
 import { selectCurrentScreen } from './store/journeySelectors';
@@ -18,6 +20,8 @@ const App = () => {
       <ProgressStepper currentScreen={currentScreen} />
       <main className={styles.main}>
         {currentScreen === JOURNEY_SCREENS.loanDetails ? <LoanDetailsScreen /> : null}
+        {currentScreen === JOURNEY_SCREENS.yourBudget ? <YourBudgetScreen /> : null}
+        {currentScreen === JOURNEY_SCREENS.yourResult ? <YourResultScreen /> : null}
       </main>
       <HowItWorksDialog isOpen={isHowItWorksOpen} onClose={() => setIsHowItWorksOpen(false)} />
     </div>
