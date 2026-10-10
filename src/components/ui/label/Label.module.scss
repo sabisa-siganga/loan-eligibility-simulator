@@ -1,0 +1,10 @@
+@use '../../../styles/mixins' as *;
+@use '../../../styles/tokens' as *;
+
+.label {
+  @include field-label;
+}
+
+.required {
+  color: $color-error;
+}
