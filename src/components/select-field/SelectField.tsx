@@ -1,6 +1,6 @@
 import { forwardRef, useId } from 'react';
 import type { ChangeEvent } from 'react';
-import { Info } from 'lucide-react';
+import { ChevronDown, Info } from 'lucide-react';
 import styles from './SelectField.module.scss';
 
 export type SelectOption = {
@@ -59,31 +59,34 @@ const SelectField = forwardRef<HTMLSelectElement, SelectFieldProps>(
             </span>
           ) : null}
         </label>
-        <select
-          ref={ref}
-          id={selectId}
-          name={name}
-          className={styles.select}
-          value={value}
-          aria-invalid={error ? true : undefined}
-          aria-describedby={
-            [helperText ? helperId : null, error ? errorId : null].filter(Boolean).join(' ') ||
-            undefined
-          }
-          aria-required={required || undefined}
-          onChange={handleChange}
-          onBlur={onBlur}
-        >
-          <option value="">{placeholder}</option>
-          {options.map((option) => (
-            <option key={option.value} value={option.value}>
-              {option.label}
-            </option>
-          ))}
-        </select>
+        <div className={styles.selectWrap}>
+          <select
+            ref={ref}
+            id={selectId}
+            name={name}
+            className={[styles.select, value === '' ? styles.placeholder : ''].filter(Boolean).join(' ')}
+            value={value}
+            aria-invalid={error ? true : undefined}
+            aria-describedby={
+              [helperText ? helperId : null, error ? errorId : null].filter(Boolean).join(' ') ||
+              undefined
+            }
+            aria-required={required || undefined}
+            onChange={handleChange}
+            onBlur={onBlur}
+          >
+            <option value="">{placeholder}</option>
+            {options.map((option) => (
+              <option key={option.value} value={option.value}>
+                {option.label}
+              </option>
+            ))}
+          </select>
+          <ChevronDown className={styles.chevron} size={18} aria-hidden="true" />
+        </div>
         {helperText ? (
           <p id={helperId} className={styles.helper}>
-            <Info size={14} aria-hidden="true" />
+            <Info size={16} aria-hidden="true" />
             <span>{helperText}</span>
           </p>
         ) : null}

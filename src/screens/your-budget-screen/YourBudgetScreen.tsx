@@ -1,8 +1,8 @@
-import { useEffect, useMemo, useRef } from 'react';
+import { Fragment, useEffect, useMemo, useRef } from 'react';
 import { Controller, useForm, useWatch } from 'react-hook-form';
 import type { Resolver } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { ArrowRight, Calculator, Shield, User } from 'lucide-react';
+import { AlertCircle, ArrowRight, Calculator, Shield, User } from 'lucide-react';
 import CheckboxField from '../../components/checkbox-field';
 import MoneyInput from '../../components/money-input';
 import SelectField from '../../components/select-field';
@@ -162,9 +162,13 @@ const YourBudgetScreen = () => {
     [],
   );
 
-  const summaryText = submittedLoan
-    ? `${formatMoneyDisplay(submittedLoan.amount)} • ${submittedLoan.termMonths} months • ${LOAN_PURPOSE_LABELS[submittedLoan.purpose]}`
-    : 'Loan details unavailable';
+  const summaryParts = submittedLoan
+    ? [
+        formatMoneyDisplay(submittedLoan.amount),
+        `${submittedLoan.termMonths} months`,
+        LOAN_PURPOSE_LABELS[submittedLoan.purpose],
+      ]
+    : null;
 
   const onBack = () => {
     dispatch(goBackToLoanDetails(getValues()));
@@ -240,22 +244,50 @@ const YourBudgetScreen = () => {
         <p className={styles.subtitle}>Tell us about your monthly income and costs.</p>
       </div>
 
-      <p className={styles.summary} data-testid="loan-summary">
-        {summaryText}
+      <p
+        className={styles.summary}
+        data-testid="loan-summary"
+        aria-label={summaryParts ? summaryParts.join(' • ') : undefined}
+      >
+        {summaryParts
+          ? summaryParts.map((part, index) => (
+              <Fragment key={part}>
+                {index > 0 ? (
+                  <span className={styles.summarySep} aria-hidden="true">
+                    •
+                  </span>
+                ) : null}
+                <span aria-hidden="true">{part}</span>
+              </Fragment>
+            ))
+          : 'Loan details unavailable'}
       </p>
 
       {eligibilityError ? (
-        <p className={styles.errorBanner} role="alert">
-          {eligibilityError}
-        </p>
+        <div className={styles.errorBanner} role="alert">
+          <AlertCircle size={24} aria-hidden="true" />
+          <div className={styles.errorBannerBody}>
+            <p className={styles.errorBannerHeading}>Check could not finish</p>
+            <p className={styles.errorBannerText}>{eligibilityError}</p>
+          </div>
+          <button
+            type="button"
+            className={styles.tryAgain}
+            onClick={() => {
+              void handleSubmit(onValidSubmit, onInvalidSubmit)();
+            }}
+          >
+            Try again
+          </button>
+        </div>
       ) : null}
 
-      <div className={styles.layout}>
-        <form
-          className={styles.formColumn}
-          noValidate
-          onSubmit={handleSubmit(onValidSubmit, onInvalidSubmit)}
-        >
+      <form
+        className={styles.layout}
+        noValidate
+        onSubmit={handleSubmit(onValidSubmit, onInvalidSubmit)}
+      >
+        <div className={styles.formColumn}>
           <p className={styles.requiredNote}>
             <span className={styles.requiredMark}>*</span> Required field
           </p>
@@ -358,84 +390,92 @@ const YourBudgetScreen = () => {
             </div>
 
             {showEmploymentDuration ? (
-              <Controller
-                name="employmentDurationMonths"
-                control={control}
-                render={({ field, fieldState }) => (
-                  <WholeNumberInput
-                    ref={field.ref}
-                    label="Employment duration (months)"
-                    name={field.name}
-                    value={field.value}
-                    required
-                    helperText="Months in your current job. Minimum 3 months to qualify."
-                    error={fieldState.error?.message}
-                    onChange={field.onChange}
-                    onBlur={field.onBlur}
-                  />
-                )}
-              />
+              <div className={styles.conditionalReveal}>
+                <Controller
+                  name="employmentDurationMonths"
+                  control={control}
+                  render={({ field, fieldState }) => (
+                    <WholeNumberInput
+                      ref={field.ref}
+                      label="Employment duration (months)"
+                      name={field.name}
+                      value={field.value}
+                      required
+                      helperText="Months in your current job. Minimum 3 months to qualify."
+                      error={fieldState.error?.message}
+                      onChange={field.onChange}
+                      onBlur={field.onBlur}
+                    />
+                  )}
+                />
+              </div>
             ) : null}
 
             {showBusinessDuration ? (
-              <Controller
-                name="businessDurationMonths"
-                control={control}
-                render={({ field, fieldState }) => (
-                  <WholeNumberInput
-                    ref={field.ref}
-                    label="Months running the business"
-                    name={field.name}
-                    value={field.value}
-                    required
-                    helperText="Minimum 3 months running the business to qualify."
-                    error={fieldState.error?.message}
-                    onChange={field.onChange}
-                    onBlur={field.onBlur}
-                  />
-                )}
-              />
+              <div className={styles.conditionalReveal}>
+                <Controller
+                  name="businessDurationMonths"
+                  control={control}
+                  render={({ field, fieldState }) => (
+                    <WholeNumberInput
+                      ref={field.ref}
+                      label="Months running the business"
+                      name={field.name}
+                      value={field.value}
+                      required
+                      helperText="Minimum 3 months running the business to qualify."
+                      error={fieldState.error?.message}
+                      onChange={field.onChange}
+                      onBlur={field.onBlur}
+                    />
+                  )}
+                />
+              </div>
             ) : null}
 
             {needsIncomeSource ? (
-              <Controller
-                name="incomeSource"
-                control={control}
-                render={({ field, fieldState }) => (
-                  <SelectField
-                    ref={field.ref}
-                    label="Income source"
-                    name={field.name}
-                    value={field.value}
-                    options={incomeSourceOptions}
-                    placeholder="Select an income source"
-                    required
-                    error={fieldState.error?.message}
-                    onChange={field.onChange}
-                    onBlur={field.onBlur}
-                  />
-                )}
-              />
+              <div className={styles.conditionalReveal}>
+                <Controller
+                  name="incomeSource"
+                  control={control}
+                  render={({ field, fieldState }) => (
+                    <SelectField
+                      ref={field.ref}
+                      label="Income source"
+                      name={field.name}
+                      value={field.value}
+                      options={incomeSourceOptions}
+                      placeholder="Select an income source"
+                      required
+                      error={fieldState.error?.message}
+                      onChange={field.onChange}
+                      onBlur={field.onBlur}
+                    />
+                  )}
+                />
+              </div>
             ) : null}
 
             {showIncomeDuration ? (
-              <Controller
-                name="incomeDurationMonths"
-                control={control}
-                render={({ field, fieldState }) => (
-                  <WholeNumberInput
-                    ref={field.ref}
-                    label="Months receiving this income"
-                    name={field.name}
-                    value={field.value}
-                    required
-                    helperText="Minimum 6 months receiving this income to qualify."
-                    error={fieldState.error?.message}
-                    onChange={field.onChange}
-                    onBlur={field.onBlur}
-                  />
-                )}
-              />
+              <div className={styles.conditionalReveal}>
+                <Controller
+                  name="incomeDurationMonths"
+                  control={control}
+                  render={({ field, fieldState }) => (
+                    <WholeNumberInput
+                      ref={field.ref}
+                      label="Months receiving this income"
+                      name={field.name}
+                      value={field.value}
+                      required
+                      helperText="Minimum 6 months receiving this income to qualify."
+                      error={fieldState.error?.message}
+                      onChange={field.onChange}
+                      onBlur={field.onBlur}
+                    />
+                  )}
+                />
+              </div>
             ) : null}
           </div>
 
@@ -479,61 +519,77 @@ const YourBudgetScreen = () => {
               />
             </div>
             {creditScoreUnknown ? (
-              <Controller
-                name="requestDemoCreditCheck"
-                control={control}
-                render={({ field }) => (
-                  <CheckboxField
-                    ref={field.ref}
-                    label="Check my credit score"
-                    name={field.name}
-                    checked={field.value}
-                    onChange={field.onChange}
-                    onBlur={field.onBlur}
-                  />
-                )}
-              />
+              <div className={styles.conditionalReveal}>
+                <Controller
+                  name="requestDemoCreditCheck"
+                  control={control}
+                  render={({ field }) => (
+                    <CheckboxField
+                      ref={field.ref}
+                      label="Check my credit score"
+                      name={field.name}
+                      checked={field.value}
+                      onChange={field.onChange}
+                      onBlur={field.onBlur}
+                    />
+                  )}
+                />
+              </div>
             ) : null}
           </div>
-
-          <div className={styles.actions}>
-            <div className={styles.secondaryActions}>
-              <button type="button" className={styles.linkButton} onClick={onBack}>
-                Back
-              </button>
-              <span className={styles.divider} aria-hidden="true" />
-              <button type="button" className={styles.linkButton} onClick={onCancel}>
-                Cancel
-              </button>
-            </div>
-            <div className={styles.primaryGroup}>
-              <button type="submit" className={styles.primaryButton} disabled={isChecking}>
-                {isChecking ? 'Checking…' : 'Check estimated eligibility'}
-                {!isChecking ? <ArrowRight size={18} aria-hidden="true" /> : null}
-              </button>
-              <p className={styles.footnote}>Includes interest; excludes fees and insurance.</p>
-            </div>
-          </div>
-        </form>
+        </div>
 
         <aside className={styles.sidebar} aria-label="Why we ask">
           <h3 className={styles.sidebarTitle}>Why we ask</h3>
           <ul className={styles.sidebarList}>
             <li className={styles.sidebarItem}>
-              <User className={styles.sidebarIcon} size={18} aria-hidden="true" />
+              <span className={styles.sidebarIconWrap}>
+                <User size={20} aria-hidden="true" />
+              </span>
               <span>Your income and costs help us estimate affordability.</span>
             </li>
             <li className={styles.sidebarItem}>
-              <Calculator className={styles.sidebarIcon} size={18} aria-hidden="true" />
+              <span className={styles.sidebarIconWrap}>
+                <Calculator size={20} aria-hidden="true" />
+              </span>
               <span>Count each cost once.</span>
             </li>
             <li className={styles.sidebarItem}>
-              <Shield className={styles.sidebarIcon} size={18} aria-hidden="true" />
+              <span className={styles.sidebarIconWrap}>
+                <Shield size={20} aria-hidden="true" />
+              </span>
               <span>Your information stays on this device.</span>
             </li>
           </ul>
         </aside>
-      </div>
+
+        <div className={styles.actions}>
+          <div className={styles.secondaryActions}>
+            <button type="button" className={styles.linkButton} onClick={onBack}>
+              Back
+            </button>
+            <button type="button" className={styles.linkButton} onClick={onCancel}>
+              Cancel
+            </button>
+          </div>
+          <div className={styles.primaryGroup}>
+            <button type="submit" className={styles.primaryButton} disabled={isChecking}>
+              {isChecking ? (
+                <>
+                  <span className={styles.spinner} aria-hidden="true" />
+                  Checking…
+                </>
+              ) : (
+                <>
+                  Check estimated eligibility
+                  <ArrowRight size={18} aria-hidden="true" />
+                </>
+              )}
+            </button>
+            <p className={styles.footnote}>Includes interest; excludes fees and insurance.</p>
+          </div>
+        </div>
+      </form>
     </section>
   );
 };

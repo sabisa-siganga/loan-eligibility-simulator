@@ -1,0 +1,214 @@
+// Design tokens — single source for colours, spacing, type, radii, breakpoints.
+
+// Colours
+$color-primary: #2f70ef;
+$color-primary-hover: #245fd1;
+$color-primary-pressed: #1d4fb5;
+$color-link: #245fd1;
+$color-light-blue-bg: #eef4ff;
+$color-light-blue-border: #bcd0fa;
+$color-page-bg: #f3f7fb;
+$color-surface: #ffffff;
+$color-muted-surface: #f1f4f8;
+$color-text: #121a33;
+$color-text-secondary: #52627a;
+$color-text-placeholder: #65748b;
+$color-divider: #dce4ef;
+$color-input-border: #8797ad;
+$color-input-hover-border: #63748d;
+$color-success: #166534;
+$color-success-bg: #edf9f0;
+$color-success-border: #a7ddb5;
+$color-warning: #8a4b08;
+$color-warning-bg: #fff7e6;
+$color-warning-border: #e7b65a;
+$color-error: #b42318;
+$color-error-bg: #fff1f0;
+$color-error-border: #d92d20;
+$color-disabled-bg: #e4eaf2;
+$color-disabled-text: #52627a;
+$color-slider-remaining: #cbd5e1;
+$color-overlay: rgba(18, 26, 51, 0.45);
+
+// Spacing scale (px)
+$space-1: 4px;
+$space-2: 8px;
+$space-3: 12px;
+$space-4: 16px;
+$space-5: 24px;
+$space-6: 32px;
+$space-7: 40px;
+$space-8: 48px;
+
+// Typography
+$font-family: 'Nunito Sans', 'Roboto', Arial, sans-serif;
+$font-size-body: 14px;
+$font-size-app-name: 20px;
+$font-size-app-name-mobile: 16px;
+$font-size-screen-heading: 32px;
+$font-size-screen-heading-mobile: 26px;
+$font-size-screen-desc: 16px;
+$font-size-screen-desc-mobile: 14px;
+$font-size-section: 20px;
+$font-size-section-mobile: 18px;
+$font-size-eligibility: 24px;
+$font-size-eligibility-mobile: 20px;
+$font-size-figure: 40px;
+$font-size-figure-mobile: 32px;
+$font-size-label: 14px;
+$font-size-field: 14px;
+$font-size-field-mobile: 16px;
+$font-size-button: 14px;
+$font-size-helper: 14px;
+$font-size-credit: 24px;
+$font-size-message-heading: 16px;
+
+// Radii
+$radius-input: 6px;
+$radius-checkbox: 4px;
+$radius-control: 8px;
+$radius-card: 10px;
+$radius-dialog: 12px;
+
+// Layout
+$content-max: 1200px;
+$stepper-max: 640px;
+$title-max: 800px;
+$description-max: 640px;
+$dialog-max: 560px;
+$column-gap: 32px;
+$padding-desktop: 32px;
+$padding-tablet: 24px;
+$padding-mobile: 16px;
+$main-padding-top: 24px;
+$main-padding-bottom: 48px;
+$control-min-height: 48px;
+$touch-min: 44px;
+
+// Breakpoints
+$bp-fields: 640px;
+$bp-stack: 960px;
+
+// Focus
+$focus-outline-width: 2px;
+$focus-outline-offset: 3px;
+$focus-outline-color: $color-primary-pressed;
+
+// Motion
+$duration-color: 150ms;
+$duration-reveal: 180ms;
+$duration-accordion: 200ms;
+$duration-screen: 200ms;
+$duration-highlight: 250ms;
+
+@mixin emit-css-variables {
+  :root {
+    --color-primary: #{$color-primary};
+    --color-primary-hover: #{$color-primary-hover};
+    --color-primary-pressed: #{$color-primary-pressed};
+    --color-link: #{$color-link};
+    --color-light-blue-bg: #{$color-light-blue-bg};
+    --color-light-blue-border: #{$color-light-blue-border};
+    --color-background: #{$color-page-bg};
+    --color-surface: #{$color-surface};
+    --color-muted-surface: #{$color-muted-surface};
+    --color-text: #{$color-text};
+    --color-text-secondary: #{$color-text-secondary};
+    --color-text-placeholder: #{$color-text-placeholder};
+    --color-divider: #{$color-divider};
+    --color-input-border: #{$color-input-border};
+    --color-input-hover-border: #{$color-input-hover-border};
+    --color-success: #{$color-success};
+    --color-success-bg: #{$color-success-bg};
+    --color-success-border: #{$color-success-border};
+    --color-warning: #{$color-warning};
+    --color-warning-bg: #{$color-warning-bg};
+    --color-warning-border: #{$color-warning-border};
+    --color-error: #{$color-error};
+    --color-error-bg: #{$color-error-bg};
+    --color-error-border: #{$color-error-border};
+    --color-disabled-bg: #{$color-disabled-bg};
+    --color-disabled-text: #{$color-disabled-text};
+    --color-slider-remaining: #{$color-slider-remaining};
+    --color-overlay: #{$color-overlay};
+
+    // Back-compat aliases used during migration
+    --color-text-muted: #{$color-text-secondary};
+    --color-border: #{$color-divider};
+    --color-accent-red: #{$color-error};
+    --color-result-success: #{$color-success};
+    --color-result-warning: #{$color-warning};
+    --color-result-reject: #{$color-error};
+    --color-focus-ring: #{$focus-outline-color};
+
+    --space-1: #{$space-1};
+    --space-2: #{$space-2};
+    --space-3: #{$space-3};
+    --space-4: #{$space-4};
+    --space-5: #{$space-5};
+    --space-6: #{$space-6};
+    --space-7: #{$space-7};
+    --space-8: #{$space-8};
+
+    --font-family: #{$font-family};
+    --font-size-base: #{$font-size-body};
+    --font-size-app-name: #{$font-size-app-name};
+    --font-size-app-name-mobile: #{$font-size-app-name-mobile};
+    --font-size-screen-heading: #{$font-size-screen-heading};
+    --font-size-screen-heading-mobile: #{$font-size-screen-heading-mobile};
+    --font-size-screen-desc: #{$font-size-screen-desc};
+    --font-size-screen-desc-mobile: #{$font-size-screen-desc-mobile};
+    --font-size-section: #{$font-size-section};
+    --font-size-section-mobile: #{$font-size-section-mobile};
+    --font-size-eligibility: #{$font-size-eligibility};
+    --font-size-eligibility-mobile: #{$font-size-eligibility-mobile};
+    --font-size-figure: #{$font-size-figure};
+    --font-size-figure-mobile: #{$font-size-figure-mobile};
+    --font-size-label: #{$font-size-label};
+    --font-size-field: #{$font-size-field};
+    --font-size-field-mobile: #{$font-size-field-mobile};
+    --font-size-button: #{$font-size-button};
+    --font-size-helper: #{$font-size-helper};
+    --font-size-credit: #{$font-size-credit};
+    --font-size-message-heading: #{$font-size-message-heading};
+    --font-size-md: #{$font-size-screen-desc};
+    --font-size-lg: #{$font-size-section};
+    --font-size-xl: #{$font-size-screen-heading};
+    --line-height-base: 1.5;
+
+    --radius-sm: #{$radius-input};
+    --radius-md: #{$radius-control};
+    --radius-input: #{$radius-input};
+    --radius-checkbox: #{$radius-checkbox};
+    --radius-control: #{$radius-control};
+    --radius-card: #{$radius-card};
+    --radius-dialog: #{$radius-dialog};
+
+    --content-max: #{$content-max};
+    --stepper-max: #{$stepper-max};
+    --title-max: #{$title-max};
+    --description-max: #{$description-max};
+    --dialog-max: #{$dialog-max};
+    --column-gap: #{$column-gap};
+    --padding-desktop: #{$padding-desktop};
+    --padding-tablet: #{$padding-tablet};
+    --padding-mobile: #{$padding-mobile};
+    --main-padding-top: #{$main-padding-top};
+    --main-padding-bottom: #{$main-padding-bottom};
+    --control-min-height: #{$control-min-height};
+    --touch-min: #{$touch-min};
+    --border-width: 1px;
+
+    --focus-outline-width: #{$focus-outline-width};
+    --focus-outline-offset: #{$focus-outline-offset};
+
+    --duration-color: #{$duration-color};
+    --duration-reveal: #{$duration-reveal};
+    --duration-accordion: #{$duration-accordion};
+    --duration-screen: #{$duration-screen};
+    --duration-highlight: #{$duration-highlight};
+
+    --bp-fields: #{$bp-fields};
+    --bp-stack: #{$bp-stack};
+  }
+}

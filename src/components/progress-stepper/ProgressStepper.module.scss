@@ -1,17 +1,28 @@
+@use '../../styles/mixins' as *;
+@use '../../styles/tokens' as *;
+
 .stepper {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
-  width: min(100%, 32rem);
+  width: min(100%, $stepper-max);
   margin: 0 auto;
-  padding: var(--space-5) var(--space-4) var(--space-4);
+  padding: $space-5 $padding-desktop 0;
   list-style: none;
+
+  @include respond-below($bp-stack) {
+    padding-inline: $padding-tablet;
+  }
+
+  @include respond-below($bp-fields) {
+    padding-inline: $padding-mobile;
+  }
 }
 
 .step {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: var(--space-2);
+  gap: $space-2;
   position: relative;
   min-width: 0;
 }
@@ -19,67 +30,60 @@
 .step + .step::before {
   content: '';
   position: absolute;
-  top: 1rem;
-  left: calc(-50% + 1rem);
-  right: calc(50% + 1rem);
+  top: 20px;
+  left: calc(-50% + 20px);
+  right: calc(50% + 20px);
   height: 2px;
-  background: var(--color-border);
+  background: $color-divider;
   z-index: 0;
+
+  @include respond-below($bp-fields) {
+    top: 16px;
+    left: calc(-50% + 16px);
+    right: calc(50% + 16px);
+  }
 }
 
 .stepComplete + .step::before {
-  background: var(--color-primary);
+  background: $color-primary;
 }
 
 .marker {
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 2rem;
-  height: 2rem;
+  width: 40px;
+  height: 40px;
   border-radius: 50%;
-  font-size: var(--font-size-base);
+  font-size: $font-size-body;
   font-weight: 700;
-  background: #e8edf5;
-  color: var(--color-text-muted);
+  background: $color-disabled-bg;
+  color: $color-text-secondary;
   z-index: 1;
+
+  @include respond-below($bp-fields) {
+    width: 32px;
+    height: 32px;
+  }
 }
 
-.stepActive .marker {
-  background: var(--color-primary);
-  color: var(--color-surface);
-}
-
+.stepActive .marker,
 .stepComplete .marker {
-  background: var(--color-primary);
-  color: var(--color-surface);
+  background: $color-primary;
+  color: $color-surface;
 }
 
 .label {
   width: 100%;
-  padding: 0 var(--space-2);
-  font-size: var(--font-size-base);
+  padding: 0 $space-2;
+  font-size: $font-size-body;
   font-weight: 600;
   line-height: 1.3;
-  color: var(--color-text-muted);
+  color: $color-text-secondary;
   text-align: center;
 }
 
-.stepActive .label {
-  color: var(--color-primary);
-}
-
+.stepActive .label,
 .stepComplete .label {
-  color: var(--color-primary);
-}
-
-@media (max-width: 480px) {
-  .stepper {
-    width: min(100%, 22rem);
-    padding-inline: var(--space-3);
-  }
-
-  .label {
-    padding: 0 var(--space-1);
-  }
+  color: $color-link;
 }

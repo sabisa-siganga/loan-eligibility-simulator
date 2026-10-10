@@ -1,29 +1,48 @@
+@use '../../styles/mixins' as *;
+@use '../../styles/tokens' as *;
+
 .field {
   display: flex;
   flex-direction: column;
-  gap: var(--space-2);
+  gap: $space-2;
 }
 
 .label {
-  font-weight: 600;
-  color: var(--color-text);
+  @include field-label;
 }
 
 .required {
-  color: var(--color-accent-red);
+  color: $color-error;
+}
+
+.selectWrap {
+  position: relative;
 }
 
 .select {
-  width: 100%;
-  min-height: var(--control-min-height);
-  padding: 0 var(--space-3);
-  border: 1px solid var(--color-border);
-  border-radius: var(--radius-sm);
-  background: var(--color-surface);
+  @include field-control;
+  appearance: none;
+  padding-right: 40px;
+  cursor: pointer;
 
   &[aria-invalid='true'] {
-    border-color: var(--color-accent-red);
+    @include field-control-invalid;
   }
+}
+
+.placeholder {
+  color: $color-text-placeholder;
+}
+
+.chevron {
+  position: absolute;
+  top: 50%;
+  right: 14px;
+  width: 18px;
+  height: 18px;
+  transform: translateY(-50%);
+  color: $color-text-secondary;
+  pointer-events: none;
 }
 
 .helper,
@@ -31,15 +50,15 @@
   margin: 0;
   display: flex;
   align-items: flex-start;
-  gap: var(--space-2);
-  font-size: var(--font-size-base);
-  line-height: var(--line-height-base);
+  gap: $space-2;
+  font-size: $font-size-helper;
+  line-height: 1.5;
 }
 
 .helper {
-  color: var(--color-text-muted);
+  color: $color-text-secondary;
 }
 
 .error {
-  color: var(--color-accent-red);
+  color: $color-error;
 }

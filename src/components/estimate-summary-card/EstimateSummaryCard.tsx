@@ -1,5 +1,6 @@
 import { useId, useState } from 'react';
-import { ArrowRight, ChevronDown, ChevronUp, Info } from 'lucide-react';
+import type { CSSProperties } from 'react';
+import { ArrowRight, ChevronDown, Info } from 'lucide-react';
 import type { RepaymentEstimate } from '../../types/loan';
 import { formatMoneyDisplay, formatTermLabel } from '../../utils/formatMoney';
 import { PRODUCT_SETTINGS } from '../../utils/productSettings';
@@ -32,6 +33,11 @@ const EstimateSummaryCard = ({
     annualRate === PRODUCT_SETTINGS.exampleAnnualRate
       ? `Using an example annual rate of ${annualRate}%.`
       : `Using an explored example annual rate of ${annualRate}%.`;
+
+  const rateProgress =
+    ((annualRate - PRODUCT_SETTINGS.exploreRateMin) /
+      (PRODUCT_SETTINGS.exploreRateMax - PRODUCT_SETTINGS.exploreRateMin)) *
+    100;
 
   return (
     <aside className={styles.card} aria-label="Estimated repayment">
@@ -75,7 +81,12 @@ const EstimateSummaryCard = ({
           onClick={() => setIsCostOpen((open) => !open)}
         >
           Cost breakdown
-          {isCostOpen ? <ChevronUp size={18} /> : <ChevronDown size={18} />}
+          <ChevronDown
+            className={styles.accordionChevron}
+            data-open={isCostOpen}
+            size={18}
+            aria-hidden="true"
+          />
         </button>
         {isCostOpen ? (
           <div id={costId} className={styles.accordionPanel}>
@@ -110,7 +121,12 @@ const EstimateSummaryCard = ({
           onClick={() => setIsExploreOpen((open) => !open)}
         >
           Explore interest rate
-          {isExploreOpen ? <ChevronUp size={18} /> : <ChevronDown size={18} />}
+          <ChevronDown
+            className={styles.accordionChevron}
+            data-open={isExploreOpen}
+            size={18}
+            aria-hidden="true"
+          />
         </button>
         {isExploreOpen ? (
           <div id={exploreId} className={styles.accordionPanel}>
@@ -131,6 +147,7 @@ const EstimateSummaryCard = ({
                 max={PRODUCT_SETTINGS.exploreRateMax}
                 step={PRODUCT_SETTINGS.exploreRateStep}
                 value={annualRate}
+                style={{ '--slider-progress': `${rateProgress}%` } as CSSProperties}
                 onChange={(event) => onAnnualRateChange(Number(event.target.value))}
               />
               <div className={styles.exploreActions}>
@@ -155,7 +172,7 @@ const EstimateSummaryCard = ({
       <p className={styles.footnote}>Includes interest. Excludes fees and insurance.</p>
 
       <div className={styles.infoBanner}>
-        <Info size={18} aria-hidden="true" color="#2F70EF" />
+        <Info size={24} aria-hidden="true" />
         <span>Affordability has not been checked yet.</span>
       </div>
 

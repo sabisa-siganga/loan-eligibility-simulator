@@ -1,5 +1,5 @@
-import { useEffect, useId, useMemo, useState } from 'react';
-import { AlertTriangle, CheckCircle2, ChevronDown, ChevronUp, Info, XCircle } from 'lucide-react';
+import { useEffect, useId, useMemo, useRef, useState } from 'react';
+import { AlertTriangle, Check, ChevronDown, Info, X } from 'lucide-react';
 import LinkedSliderField from '../../components/linked-slider-field';
 import { useAppDispatch, useAppSelector } from '../../store/hooks';
 import { editBudgetDetails, resetJourney, updateSubmittedLoanDetails } from '../../store/journeySlice';
@@ -25,6 +25,8 @@ const YourResultScreen = () => {
   const [amountError, setAmountError] = useState<string | undefined>();
   const [termError, setTermError] = useState<string | undefined>();
   const [isCostOpen, setIsCostOpen] = useState(false);
+  const [isFigureHighlighted, setIsFigureHighlighted] = useState(false);
+  const previousFigureRef = useRef<string | null>(null);
 
   const loanAmount = loan?.amount;
   const loanTermMonths = loan?.termMonths;
@@ -70,6 +72,26 @@ const YourResultScreen = () => {
       demoCreditScore,
     });
   }, [loan, budget, demoCreditScore, adjustIsValid]);
+
+  useEffect(() => {
+    const nextFigure = viewModel?.monthlyRepaymentDisplay ?? null;
+    if (previousFigureRef.current === null) {
+      previousFigureRef.current = nextFigure;
+      return;
+    }
+    if (nextFigure !== null && nextFigure !== previousFigureRef.current) {
+      previousFigureRef.current = nextFigure;
+      setIsFigureHighlighted(true);
+      const timer = window.setTimeout(() => {
+        setIsFigureHighlighted(false);
+      }, 250);
+      return () => {
+        window.clearTimeout(timer);
+      };
+    }
+    previousFigureRef.current = nextFigure;
+    return undefined;
+  }, [viewModel?.monthlyRepaymentDisplay]);
 
   const validateAmount = (value: number | null) => {
     if (value === null) {
@@ -124,7 +146,9 @@ const YourResultScreen = () => {
 
   const moneyLeftBoxClass = [
     styles.moneyLeftBox,
-    viewModel?.showBufferNote ? styles.moneyLeftBoxTight : '',
+    viewModel && viewModel.moneyLeft >= 0 && viewModel.moneyLeft < 1000
+      ? styles.moneyLeftBoxTight
+      : '',
     viewModel && viewModel.moneyLeft < 0 ? styles.moneyLeftBoxShortfall : '',
   ]
     .filter(Boolean)
@@ -139,9 +163,13 @@ const YourResultScreen = () => {
           <div className={styles.status}>
             <div className={styles.statusRow}>
               {viewModel.isEligible ? (
-                <CheckCircle2 className={styles.statusIconPass} size={28} aria-hidden="true" />
+                <span className={styles.statusIconPass} aria-hidden="true">
+                  <Check size={24} strokeWidth={2.5} />
+                </span>
               ) : (
-                <XCircle className={styles.statusIconFail} size={28} aria-hidden="true" />
+                <span className={styles.statusIconFail} aria-hidden="true">
+                  <X size={24} strokeWidth={2.5} />
+                </span>
               )}
               <p className={viewModel.isEligible ? styles.statusLabelPass : styles.statusLabelFail}>
                 {viewModel.statusLabel}
@@ -170,10 +198,10 @@ const YourResultScreen = () => {
 
       {viewModel?.showTightBudgetWarning ? (
         <div className={styles.warning} role="status">
-          <AlertTriangle color="#B86E00" size={20} aria-hidden="true" />
+          <AlertTriangle size={24} aria-hidden="true" />
           <div>
             <div className={styles.warningTitle}>Tight budget</div>
-            <div>
+            <div className={styles.warningBody}>
               This repayment fits your budget, but leaves little money for unexpected costs.
             </div>
           </div>
@@ -181,111 +209,131 @@ const YourResultScreen = () => {
       ) : null}
 
       <div className={styles.layout}>
-        <div className={styles.card}>
-          <h3 className={styles.cardTitle}>Your loan summary</h3>
-          {viewModel ? (
-            <>
-              <div>
-                <p className={styles.monthlyLabel}>Monthly repayment</p>
-                <p className={styles.monthlyValue}>{viewModel.monthlyRepaymentDisplay}</p>
-              </div>
-              <dl className={styles.rows}>
-                <div className={styles.row}>
-                  <dt>Loan amount</dt>
-                  <dd>{viewModel.loanAmountDisplay}</dd>
-                </div>
-                <div className={styles.row}>
-                  <dt>Term</dt>
-                  <dd>{viewModel.termDisplay}</dd>
-                </div>
-                <div className={styles.row}>
-                  <dt>Annual interest</dt>
-                  <dd>{viewModel.annualRateDisplay}</dd>
-                </div>
-                <div className={styles.row}>
-                  <dt>Total interest</dt>
-                  <dd>{viewModel.totalInterestDisplay}</dd>
-                </div>
-                <div className={styles.row}>
-                  <dt>Total repayment</dt>
-                  <dd>{viewModel.totalRepaymentDisplay}</dd>
-                </div>
-              </dl>
-              <p className={styles.footnote}>
-                <Info size={14} aria-hidden="true" />
-                <span>Includes interest. Excludes fees and insurance.</span>
-              </p>
-              <div>
-                <button
-                  type="button"
-                  className={styles.accordionButton}
-                  aria-expanded={isCostOpen}
-                  aria-controls={costId}
-                  onClick={() => setIsCostOpen((open) => !open)}
-                >
-                  Cost breakdown
-                  {isCostOpen ? <ChevronUp size={18} /> : <ChevronDown size={18} />}
-                </button>
-                {isCostOpen ? (
-                  <div id={costId} className={styles.accordionPanel}>
-                    <dl className={styles.rows}>
-                      <div className={styles.row}>
-                        <dt>Monthly repayment</dt>
-                        <dd>{viewModel.monthlyRepaymentDisplay}</dd>
-                      </div>
-                      <div className={styles.row}>
-                        <dt>Total interest</dt>
-                        <dd>{viewModel.totalInterestDisplay}</dd>
-                      </div>
-                      <div className={styles.row}>
-                        <dt>Total repayment</dt>
-                        <dd>{viewModel.totalRepaymentDisplay}</dd>
-                      </div>
-                    </dl>
+        <div className={styles.leftColumn}>
+          <div className={styles.card}>
+            <h3 className={styles.cardTitle}>Your loan summary</h3>
+            {viewModel ? (
+              <>
+                <div className={styles.summarySplit}>
+                  <div className={styles.summaryFigure}>
+                    <p className={styles.monthlyLabel}>Monthly repayment</p>
+                    <p
+                      className={[
+                        styles.monthlyValue,
+                        isFigureHighlighted ? styles.monthlyValueHighlight : '',
+                      ]
+                        .filter(Boolean)
+                        .join(' ')}
+                    >
+                      {viewModel.monthlyRepaymentDisplay}
+                    </p>
                   </div>
-                ) : null}
-              </div>
-            </>
-          ) : (
-            <p className={styles.invalidNotice}>Enter a valid amount and term.</p>
-          )}
+                  <dl className={styles.rows}>
+                    <div className={styles.row}>
+                      <dt>Loan amount</dt>
+                      <dd>{viewModel.loanAmountDisplay}</dd>
+                    </div>
+                    <div className={styles.row}>
+                      <dt>Term</dt>
+                      <dd>{viewModel.termDisplay}</dd>
+                    </div>
+                    <div className={styles.row}>
+                      <dt>Annual interest</dt>
+                      <dd>{viewModel.annualRateDisplay}</dd>
+                    </div>
+                    <div className={styles.row}>
+                      <dt>Total interest</dt>
+                      <dd>{viewModel.totalInterestDisplay}</dd>
+                    </div>
+                    <div className={styles.row}>
+                      <dt>Total repayment</dt>
+                      <dd>{viewModel.totalRepaymentDisplay}</dd>
+                    </div>
+                  </dl>
+                </div>
+                <p className={styles.footnote}>
+                  <Info size={16} aria-hidden="true" />
+                  <span>Includes interest. Excludes fees and insurance.</span>
+                </p>
+                <div>
+                  <button
+                    type="button"
+                    className={styles.accordionButton}
+                    aria-expanded={isCostOpen}
+                    aria-controls={costId}
+                    onClick={() => setIsCostOpen((open) => !open)}
+                  >
+                    Cost breakdown
+                    <ChevronDown
+                      className={styles.accordionChevron}
+                      data-open={isCostOpen}
+                      size={18}
+                      aria-hidden="true"
+                    />
+                  </button>
+                  {isCostOpen ? (
+                    <div id={costId} className={styles.accordionPanel}>
+                      <dl className={styles.rows}>
+                        <div className={styles.row}>
+                          <dt>Monthly repayment</dt>
+                          <dd>{viewModel.monthlyRepaymentDisplay}</dd>
+                        </div>
+                        <div className={styles.row}>
+                          <dt>Total interest</dt>
+                          <dd>{viewModel.totalInterestDisplay}</dd>
+                        </div>
+                        <div className={styles.row}>
+                          <dt>Total repayment</dt>
+                          <dd>{viewModel.totalRepaymentDisplay}</dd>
+                        </div>
+                      </dl>
+                    </div>
+                  ) : null}
+                </div>
+              </>
+            ) : (
+              <p className={styles.invalidNotice}>Enter a valid amount and term.</p>
+            )}
+          </div>
 
           <div className={styles.adjustBlock}>
             <h3 className={styles.cardTitle}>Adjust your loan</h3>
-            <LinkedSliderField
-              label="Loan amount (R)"
-              mode="money"
-              value={amount}
-              min={PRODUCT_SETTINGS.minAmount}
-              max={PRODUCT_SETTINGS.maxAmount}
-              minLabel="R5,000"
-              maxLabel="R300,000"
-              required
-              error={amountError}
-              onChange={(value) => {
-                setAmount(value);
-                validateAmount(value);
-              }}
-              onBlur={() => validateAmount(amount)}
-            />
-            <LinkedSliderField
-              label="Repayment term (months)"
-              mode="term"
-              value={termMonths}
-              min={PRODUCT_SETTINGS.minTermMonths}
-              max={PRODUCT_SETTINGS.maxTermMonths}
-              minLabel="6"
-              maxLabel="60"
-              required
-              error={termError}
-              onChange={(value) => {
-                setTermMonths(value);
-                validateTerm(value);
-              }}
-              onBlur={() => validateTerm(termMonths)}
-            />
+            <div className={styles.adjustFields}>
+              <LinkedSliderField
+                label="Loan amount (R)"
+                mode="money"
+                value={amount}
+                min={PRODUCT_SETTINGS.minAmount}
+                max={PRODUCT_SETTINGS.maxAmount}
+                minLabel="R5,000"
+                maxLabel="R300,000"
+                required
+                error={amountError}
+                onChange={(value) => {
+                  setAmount(value);
+                  validateAmount(value);
+                }}
+                onBlur={() => validateAmount(amount)}
+              />
+              <LinkedSliderField
+                label="Repayment term (months)"
+                mode="term"
+                value={termMonths}
+                min={PRODUCT_SETTINGS.minTermMonths}
+                max={PRODUCT_SETTINGS.maxTermMonths}
+                minLabel="6"
+                maxLabel="60"
+                required
+                error={termError}
+                onChange={(value) => {
+                  setTermMonths(value);
+                  validateTerm(value);
+                }}
+                onBlur={() => validateTerm(termMonths)}
+              />
+            </div>
             <p className={styles.helper}>
-              <Info size={14} aria-hidden="true" />
+              <Info size={16} aria-hidden="true" />
               <span>A longer term can lower monthly repayments but increase total interest.</span>
             </p>
           </div>
@@ -329,7 +377,7 @@ const YourResultScreen = () => {
 
               <div>
                 <p className={styles.monthlyLabel}>Share of income spent on debt repayments</p>
-                <p className={styles.moneyLeftValue}>
+                <p className={styles.debtShareValue}>
                   {viewModel.debtShareDisplay ?? viewModel.debtShareUnavailableMessage}
                 </p>
               </div>
@@ -337,7 +385,7 @@ const YourResultScreen = () => {
               <hr className={styles.divider} />
 
               <div>
-                <h3 className={styles.cardTitle}>Your credit score</h3>
+                <h3 className={styles.creditHeading}>Your credit score</h3>
                 {viewModel.creditScoreDisplay ? (
                   <p className={styles.creditScore}>{viewModel.creditScoreDisplay}</p>
                 ) : null}
@@ -345,7 +393,7 @@ const YourResultScreen = () => {
                   <p className={styles.creditCaption}>{viewModel.creditScoreCaption}</p>
                 ) : null}
                 <p className={styles.footnote}>
-                  <Info size={14} aria-hidden="true" />
+                  <Info size={16} aria-hidden="true" />
                   <span>{viewModel.rateExplanation}</span>
                 </p>
               </div>

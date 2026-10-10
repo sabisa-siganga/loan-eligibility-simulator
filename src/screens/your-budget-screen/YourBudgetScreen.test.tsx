@@ -50,7 +50,7 @@ describe('YourBudgetScreen', () => {
 
     expect(screen.getByTestId('your-budget-screen')).toBeInTheDocument();
     expect(screen.getByTestId('loan-summary')).toHaveTextContent(
-      'R50,000.00 • 24 months • Home improvement',
+      'R50,000.00•24 months•Home improvement',
     );
     expect(screen.getByRole('textbox', { name: /Monthly take-home income/i })).toHaveValue('');
     expect(screen.getByLabelText(/Employment status/i)).toHaveValue('');

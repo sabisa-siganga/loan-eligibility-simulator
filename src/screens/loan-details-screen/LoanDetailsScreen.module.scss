@@ -1,49 +1,47 @@
+@use '../../styles/mixins' as *;
+@use '../../styles/tokens' as *;
+
 .screen {
-  width: min(100%, 72rem);
-  margin: 0 auto;
-  padding: 0 var(--space-5) var(--space-8);
+  @include content-shell;
 }
 
 .intro {
-  text-align: center;
-  margin: 0 0 var(--space-6);
+  @include screen-intro;
 }
 
 .title {
-  margin: 0 0 var(--space-2);
-  font-size: clamp(1.5rem, 2.5vw, 2rem);
-  font-weight: 700;
-  color: var(--color-text);
+  @include screen-title;
 }
 
 .subtitle {
-  margin: 0;
-  color: var(--color-text-muted);
+  @include screen-description;
 }
 
 .requiredNote {
-  margin: 0 0 var(--space-4);
-  color: var(--color-text-muted);
+  margin: 0 0 $space-4;
+  color: $color-text-secondary;
+  font-size: $font-size-helper;
+  line-height: 1.5;
 }
 
 .requiredMark {
-  color: var(--color-accent-red);
+  color: $color-error;
 }
 
 .layout {
   display: grid;
-  grid-template-columns: minmax(0, 1.1fr) minmax(0, 0.9fr);
-  gap: var(--space-6);
+  grid-template-columns: minmax(0, 3fr) minmax(0, 2fr);
+  gap: $column-gap;
   align-items: start;
 }
 
 .form {
   display: flex;
   flex-direction: column;
-  gap: var(--space-5);
+  gap: $space-5;
 }
 
-@media (max-width: 800px) {
+@include respond-below($bp-stack) {
   .layout {
     grid-template-columns: 1fr;
   }

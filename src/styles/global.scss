@@ -1,44 +1,7 @@
-:root {
-  /* Colours */
-  --color-primary: #2f70ef;
-  --color-primary-hover: #2560d4;
-  --color-surface: #ffffff;
-  --color-background: #f3f5f9;
-  --color-text: #1a1f2e;
-  --color-text-muted: #5b6475;
-  --color-border: #d8dee9;
-  --color-accent-red: #c0392b;
-  --color-result-success: #1f7a4d;
-  --color-result-warning: #b86e00;
-  --color-result-reject: #c0392b;
-  --color-focus-ring: #2f70ef;
+@use 'tokens' as *;
+@use 'mixins' as *;
 
-  /* Spacing */
-  --space-1: 0.25rem;
-  --space-2: 0.5rem;
-  --space-3: 0.75rem;
-  --space-4: 1rem;
-  --space-5: 1.5rem;
-  --space-6: 2rem;
-  --space-8: 3rem;
-
-  /* Typography: 1rem = 14px */
-  --font-family: 'Nunito Sans', Roboto, Arial, sans-serif;
-  --font-size-base: 1rem;
-  --font-size-md: 1.1429rem;
-  --font-size-lg: 1.2857rem;
-  --font-size-xl: 1.7143rem;
-  --font-size-figure: 1.4286rem;
-  --line-height-base: 1.5;
-
-  /* Borders and focus */
-  --radius-sm: 0.2857rem;
-  --radius-md: 0.5714rem;
-  --border-width: 1px;
-  --focus-outline-width: 2px;
-  --focus-outline-offset: 2px;
-  --control-min-height: 2.8571rem;
-}
+@include emit-css-variables;
 
 *,
 *::before,
@@ -78,7 +41,7 @@ p {
 }
 
 a {
-  color: var(--color-primary);
+  color: var(--color-link);
 }
 
 button,
@@ -87,22 +50,22 @@ select,
 textarea {
   font: inherit;
   color: inherit;
-  min-height: var(--control-min-height);
 }
 
 :focus-visible {
-  outline: var(--focus-outline-width) solid var(--color-focus-ring);
-  outline-offset: var(--focus-outline-offset);
+  @include focus-ring;
 }
 
-.helper-text,
-.error-text {
-  font-size: var(--font-size-base);
+.helper-text {
+  font-size: var(--font-size-helper);
   line-height: var(--line-height-base);
+  color: var(--color-text-secondary);
 }
 
 .error-text {
-  color: var(--color-accent-red);
+  font-size: var(--font-size-helper);
+  line-height: var(--line-height-base);
+  color: var(--color-error);
 }
 
 .visually-hidden {
@@ -117,11 +80,11 @@ textarea {
   border: 0;
 }
 
-@media (max-width: 480px) {
+@include respond-below($bp-fields) {
   input:not([type='checkbox']):not([type='radio']):not([type='range']),
   select,
   textarea {
-    font-size: 1.1429rem; /* 16px at 14px root — reduces iOS focus zoom */
+    font-size: var(--font-size-field-mobile);
   }
 }
 

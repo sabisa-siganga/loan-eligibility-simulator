@@ -1,3 +1,6 @@
+@use './styles/mixins' as *;
+@use './styles/tokens' as *;
+
 .app {
   min-height: 100vh;
   display: flex;
@@ -9,4 +12,6 @@
 .main {
   flex: 1;
   width: 100%;
+  padding-top: $main-padding-top;
+  padding-bottom: $main-padding-bottom;
 }

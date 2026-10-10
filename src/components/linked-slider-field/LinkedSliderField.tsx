@@ -1,5 +1,5 @@
 import { forwardRef, useId, useState } from 'react';
-import type { ChangeEvent, ClipboardEvent, KeyboardEvent } from 'react';
+import type { CSSProperties, ChangeEvent, ClipboardEvent, KeyboardEvent } from 'react';
 import {
   formatMoneyInputBlur,
   formatMoneyInputFocus,
@@ -55,6 +55,8 @@ const LinkedSliderField = forwardRef<HTMLInputElement, LinkedSliderFieldProps>(
     const [pasteError, setPasteError] = useState<string | undefined>();
 
     const sliderValue = value !== null && value >= min && value <= max ? value : min;
+    const sliderProgress =
+      max === min ? 0 : Math.min(100, Math.max(0, ((sliderValue - min) / (max - min)) * 100));
 
     const displayValue = (() => {
       if (isFocused) {
@@ -182,6 +184,7 @@ const LinkedSliderField = forwardRef<HTMLInputElement, LinkedSliderFieldProps>(
             max={max}
             step={step}
             value={sliderValue}
+            style={{ '--slider-progress': `${sliderProgress}%` } as CSSProperties}
             aria-label={`Adjust ${label}`}
             aria-valuemin={min}
             aria-valuemax={max}

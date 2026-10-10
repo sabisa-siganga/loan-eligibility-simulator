@@ -1,21 +1,47 @@
+@use '../../styles/mixins' as *;
+@use '../../styles/tokens' as *;
+
 .field {
   display: flex;
   align-items: flex-start;
-  gap: var(--space-2);
-  min-height: var(--control-min-height);
+  gap: 10px;
+  min-height: $touch-min;
 }
 
 .input {
-  width: 1.1429rem;
-  height: 1.1429rem;
-  min-height: auto;
-  margin-top: 0.2rem;
-  accent-color: var(--color-primary);
+  appearance: none;
+  flex-shrink: 0;
+  width: 20px;
+  height: 20px;
+  margin: 12px 0 0;
+  border: 1px solid $color-input-border;
+  border-radius: $radius-checkbox;
+  background: $color-surface;
   cursor: pointer;
+  transition:
+    background-color $duration-color ease,
+    border-color $duration-color ease;
+
+  &:checked {
+    border-color: $color-primary;
+    background-color: $color-primary;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='none' stroke='white' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='3.5 8.5 6.5 11.5 12.5 4.5'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: 14px 14px;
+  }
+
+  &:focus-visible {
+    @include focus-ring;
+  }
 }
 
 .label {
-  font-weight: 600;
-  color: var(--color-text);
+  flex: 1;
+  padding-block: 12px;
+  color: $color-text;
+  font-size: $font-size-body;
+  font-weight: 400;
+  line-height: 1.5;
   cursor: pointer;
 }
