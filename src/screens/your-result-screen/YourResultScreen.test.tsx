@@ -7,6 +7,7 @@ import { createAppStore } from '../../store/store';
 import {
   eligibilitySucceeded,
   JOURNEY_SCREENS,
+  setCurrentScreen,
   submitBudgetAndStartCheck,
   submitLoanDetails,
 } from '../../store/journeySlice';
@@ -181,5 +182,45 @@ describe('YourResultScreen', () => {
 
     expect(screen.getByText('No credit score used')).toBeInTheDocument();
     expect(screen.getByText('Using an example annual rate of 12.5%.')).toBeInTheDocument();
+  });
+
+  it('shows unavailable copy when result details are missing', async () => {
+    const store = createAppStore();
+    store.dispatch(setCurrentScreen(JOURNEY_SCREENS.yourResult));
+    const user = userEvent.setup();
+
+    render(
+      <Provider store={store}>
+        <App />
+      </Provider>,
+    );
+
+    expect(
+      screen.getByText('Result details are unavailable. Start again to check a loan.'),
+    ).toBeInTheDocument();
+
+    await user.click(screen.getByRole('button', { name: /Start again/i }));
+    expect(screen.getByTestId('loan-details-screen')).toBeInTheDocument();
+  });
+
+  it('shows a term error when the repayment term is cleared', async () => {
+    const { user } = openResult();
+    const term = screen.getByRole('textbox', { name: /Repayment term \(months\)/i });
+
+    await user.clear(term);
+    await user.tab();
+
+    expect(screen.getByText('Enter a repayment term.')).toBeInTheDocument();
+  });
+
+  it('shows a term range error when the term is above the maximum', async () => {
+    const { user } = openResult();
+    const term = screen.getByRole('textbox', { name: /Repayment term \(months\)/i });
+
+    await user.clear(term);
+    await user.type(term, '61');
+    await user.tab();
+
+    expect(screen.getByText(/Enter a term from 6 to 60 months/i)).toBeInTheDocument();
   });
 });

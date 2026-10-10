@@ -54,4 +54,18 @@ describe('InputGroup', () => {
     await user.click(input);
     expect(input).toHaveFocus();
   });
+
+  it('supports an inline-end addon alignment', () => {
+    const { container } = render(
+      <InputGroup>
+        <InputGroupInput aria-label="Amount" />
+        <InputGroupAddon align="inline-end">
+          <InputGroupText>ZAR</InputGroupText>
+        </InputGroupAddon>
+      </InputGroup>,
+    );
+
+    const addon = container.querySelector('[data-slot="input-group-addon"]');
+    expect(addon).toHaveClass(styles.addonInlineEnd);
+  });
 });

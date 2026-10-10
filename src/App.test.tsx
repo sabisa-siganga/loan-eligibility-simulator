@@ -1,4 +1,5 @@
 import { cleanup, render, screen } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
 import { Provider } from 'react-redux';
 import { afterEach, describe, expect, it } from 'vitest';
 import { act } from 'react';
@@ -65,5 +66,22 @@ describe('App shell', () => {
       store.dispatch(resetJourney());
     });
     expect(screen.getByTestId('loan-details-screen')).toBeInTheDocument();
+  });
+
+  it('opens How it works and returns focus to the header control on close', async () => {
+    const user = userEvent.setup();
+    renderApp();
+
+    const openButton = screen.getByRole('button', { name: /How it works/i });
+    await user.click(openButton);
+    expect(screen.getByRole('dialog', { name: /How it works/i })).toBeInTheDocument();
+
+    await user.keyboard('{Escape}');
+    await act(async () => {
+      await Promise.resolve();
+    });
+
+    expect(screen.queryByRole('dialog', { name: /How it works/i })).not.toBeInTheDocument();
+    expect(openButton).toHaveFocus();
   });
 });

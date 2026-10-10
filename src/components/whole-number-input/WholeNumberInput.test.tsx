@@ -1,4 +1,4 @@
-import { cleanup, render, screen } from '@testing-library/react';
+import { cleanup, fireEvent, render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { useState } from 'react';
 import { afterEach, describe, expect, it, vi } from 'vitest';
@@ -106,5 +106,22 @@ describe('WholeNumberInput', () => {
     );
 
     expect(screen.getByRole('alert')).toHaveTextContent('You must be between 18 and 65 years old.');
+  });
+
+  it('allows control and navigation keydowns without preventing default', () => {
+    const onChange = vi.fn();
+    render(<WholeNumberInput label="Duration (months)" value={12} onChange={onChange} />);
+
+    const input = screen.getByRole('textbox', { name: /Duration \(months\)/i });
+    fireEvent.keyDown(input, { key: 'ArrowLeft' });
+    fireEvent.keyDown(input, { key: 'Escape' });
+    fireEvent.keyDown(input, { key: 'c', metaKey: true });
+    fireEvent.keyDown(input, { key: 'c', ctrlKey: true });
+    fireEvent.change(input, { target: { value: '' } });
+    expect(onChange).toHaveBeenCalledWith(null);
+    fireEvent.paste(input, {
+      clipboardData: { getData: () => '12' },
+    });
+    expect(onChange).toHaveBeenCalledWith(12);
   });
 });

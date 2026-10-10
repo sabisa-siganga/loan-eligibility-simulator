@@ -103,4 +103,81 @@ describe('LoanDetailsScreen', () => {
     expect(within(estimate).getByText('R6,768.77')).toBeInTheDocument();
     expect(within(estimate).getByText('R56,768.77')).toBeInTheDocument();
   });
+
+  it('hides the estimate and shows an amount error when the amount is cleared', async () => {
+    const { user } = renderLoanDetails();
+
+    const amount = screen.getByRole('textbox', { name: /^Loan amount \(R\)/i });
+    await user.clear(amount);
+    await user.tab();
+    await user.click(screen.getByRole('button', { name: /Continue to your budget/i }));
+
+    expect(await screen.findByText('Enter a loan amount.')).toBeInTheDocument();
+    expect(
+      screen.getByText('Enter a valid amount and term to see an estimate.'),
+    ).toBeInTheDocument();
+    expect(screen.getByRole('textbox', { name: /^Loan amount \(R\)/i })).toHaveFocus();
+    expect(screen.getByTestId('loan-details-screen')).toBeInTheDocument();
+  });
+
+  it('shows a term error and focuses term when amount is valid but term is cleared', async () => {
+    const { user } = renderLoanDetails();
+
+    const term = screen.getByRole('textbox', { name: /Repayment term \(months\)/i });
+    await user.clear(term);
+    await user.tab();
+    await user.click(screen.getByRole('button', { name: /Continue to your budget/i }));
+
+    expect(await screen.findByText('Enter a repayment term.')).toBeInTheDocument();
+    expect(screen.getByRole('textbox', { name: /Repayment term \(months\)/i })).toHaveFocus();
+    expect(screen.getByTestId('loan-details-screen')).toBeInTheDocument();
+  });
+
+  it('rejects an out-of-range amount entered in the money field', async () => {
+    const { user } = renderLoanDetails();
+
+    const amount = screen.getByRole('textbox', { name: /^Loan amount \(R\)/i });
+    await user.clear(amount);
+    await user.type(amount, '4999');
+    await user.tab();
+    await user.selectOptions(screen.getByLabelText(/Loan purpose/i), 'education');
+    await user.click(screen.getByRole('button', { name: /Continue to your budget/i }));
+
+    expect(await screen.findByText(/Enter an amount from/i)).toBeInTheDocument();
+    expect(screen.getByTestId('loan-details-screen')).toBeInTheDocument();
+  });
+
+  it('opens the cost breakdown accordion for the current estimate', async () => {
+    const { user } = renderLoanDetails();
+
+    await user.click(screen.getByRole('button', { name: /Cost breakdown/i }));
+
+    const estimate = screen.getByLabelText('Estimated repayment');
+    expect(
+      within(estimate).queryByText('Enter a valid amount and term to see the cost breakdown.'),
+    ).not.toBeInTheDocument();
+    expect(within(estimate).getAllByText('Total interest').length).toBeGreaterThan(1);
+  });
+
+  it('shows a paste error when non-digit text is pasted into the amount field', async () => {
+    const { user } = renderLoanDetails();
+    const amount = screen.getByRole('textbox', { name: /^Loan amount \(R\)/i });
+
+    await user.click(amount);
+    await user.paste('abc');
+
+    expect(await screen.findByText('Enter whole rands using digits only.')).toBeInTheDocument();
+  });
+
+  it('accepts a currency-formatted paste into the amount field', async () => {
+    const { user } = renderLoanDetails();
+    const amount = screen.getByRole('textbox', { name: /^Loan amount \(R\)/i });
+
+    await user.click(amount);
+    await user.paste('R 25,000.00');
+    await user.tab();
+
+    expect(amount).toHaveValue('25000.00');
+    expect(screen.queryByText('Enter whole rands using digits only.')).not.toBeInTheDocument();
+  });
 });
