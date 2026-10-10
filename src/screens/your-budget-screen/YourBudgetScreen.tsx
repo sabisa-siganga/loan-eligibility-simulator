@@ -42,6 +42,7 @@ import {
 } from '../../utils/budgetDetailsSchema';
 import { pickDemoCreditScore } from '../../utils/demoCreditScore';
 import { formatMoneyDisplay } from '../../utils/formatMoney';
+import { POLICY_THRESHOLDS } from '../../utils/policyThresholds';
 import styles from './YourBudgetScreen.module.scss';
 
 const employmentOptions = EMPLOYMENT_STATUSES.map((value) => ({
@@ -363,6 +364,10 @@ const YourBudgetScreen = () => {
                     label="Age (years)"
                     name={field.name}
                     value={field.value}
+                    type="number"
+                    min={POLICY_THRESHOLDS.minAge}
+                    max={POLICY_THRESHOLDS.maxAge}
+                    step={1}
                     required
                     error={fieldState.error?.message}
                     onChange={field.onChange}

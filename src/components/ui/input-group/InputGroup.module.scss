@@ -45,7 +45,7 @@
   }
 
   &:has(:read-only) {
-    background: $color-muted-surface;
+    background: $color-surface;
     color: $color-text;
   }
 
