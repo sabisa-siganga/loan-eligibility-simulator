@@ -4,3 +4,6 @@ node_modules
 package-lock.json
 *.min.js
 documents
+public/mockServiceWorker.js
+playwright-report
+test-results
