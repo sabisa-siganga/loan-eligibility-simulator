@@ -123,4 +123,32 @@ describe('budgetDetailsFormSchema', () => {
     });
     expect(result.success).toBe(false);
   });
+
+  it('requires business duration for self-employed users', () => {
+    const missing = budgetDetailsFormSchema.safeParse({
+      ...validBase,
+      employmentStatus: 'selfEmployed',
+      employmentDurationMonths: null,
+      businessDurationMonths: null,
+    });
+    expect(missing.success).toBe(false);
+
+    const present = budgetDetailsFormSchema.safeParse({
+      ...validBase,
+      employmentStatus: 'selfEmployed',
+      employmentDurationMonths: null,
+      businessDurationMonths: 12,
+    });
+    expect(present.success).toBe(true);
+  });
+
+  it('requires an income source for unemployed users', () => {
+    const result = budgetDetailsFormSchema.safeParse({
+      ...validBase,
+      employmentStatus: 'unemployed',
+      employmentDurationMonths: null,
+      incomeSource: null,
+    });
+    expect(result.success).toBe(false);
+  });
 });

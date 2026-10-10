@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'vitest';
-import { calculateRepayment } from './calculateRepayment';
+import { calculateRepayment, isValidLoanEstimateInput } from './calculateRepayment';
+import { PRODUCT_SETTINGS } from './productSettings';
 import { roundMoney } from './roundMoney';
 
 describe('calculateRepayment', () => {
@@ -46,5 +47,74 @@ describe('calculateRepayment', () => {
 
     const rebuiltFromRoundedDisplay = roundMoney(estimate.monthlyPayment * termMonths);
     expect(estimate.totalRepayment).not.toBe(rebuiltFromRoundedDisplay);
+  });
+
+  it('returns zeroed figures when principal, term, or rate is invalid', () => {
+    expect(
+      calculateRepayment({ principal: 0, termMonths: 12, annualRatePercent: 12.5 }),
+    ).toEqual({
+      monthlyPayment: 0,
+      totalRepayment: 0,
+      totalInterest: 0,
+      annualRate: 12.5,
+    });
+    expect(
+      calculateRepayment({ principal: 12_000, termMonths: 0, annualRatePercent: 12.5 }),
+    ).toEqual({
+      monthlyPayment: 0,
+      totalRepayment: 0,
+      totalInterest: 0,
+      annualRate: 12.5,
+    });
+    expect(
+      calculateRepayment({
+        principal: 12_000,
+        termMonths: 12,
+        annualRatePercent: Number.NaN,
+      }),
+    ).toEqual({
+      monthlyPayment: 0,
+      totalRepayment: 0,
+      totalInterest: 0,
+      annualRate: Number.NaN,
+    });
+  });
+});
+
+describe('isValidLoanEstimateInput', () => {
+  it('accepts amounts and terms inside the product bounds', () => {
+    expect(
+      isValidLoanEstimateInput(
+        PRODUCT_SETTINGS.minAmount,
+        PRODUCT_SETTINGS.minTermMonths,
+        PRODUCT_SETTINGS.minAmount,
+        PRODUCT_SETTINGS.maxAmount,
+        PRODUCT_SETTINGS.minTermMonths,
+        PRODUCT_SETTINGS.maxTermMonths,
+      ),
+    ).toBe(true);
+  });
+
+  it('rejects non-integer terms and out-of-range amounts', () => {
+    expect(
+      isValidLoanEstimateInput(
+        PRODUCT_SETTINGS.minAmount,
+        6.5,
+        PRODUCT_SETTINGS.minAmount,
+        PRODUCT_SETTINGS.maxAmount,
+        PRODUCT_SETTINGS.minTermMonths,
+        PRODUCT_SETTINGS.maxTermMonths,
+      ),
+    ).toBe(false);
+    expect(
+      isValidLoanEstimateInput(
+        PRODUCT_SETTINGS.minAmount - 1,
+        PRODUCT_SETTINGS.minTermMonths,
+        PRODUCT_SETTINGS.minAmount,
+        PRODUCT_SETTINGS.maxAmount,
+        PRODUCT_SETTINGS.minTermMonths,
+        PRODUCT_SETTINGS.maxTermMonths,
+      ),
+    ).toBe(false);
   });
 });

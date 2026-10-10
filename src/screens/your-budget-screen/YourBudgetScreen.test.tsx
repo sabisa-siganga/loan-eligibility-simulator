@@ -76,6 +76,21 @@ describe('YourBudgetScreen', () => {
     expect(screen.getByLabelText(/Income source/i)).toBeInTheDocument();
   });
 
+  it('shows business duration for self-employed and income duration for rental income', async () => {
+    const { user } = seedLoanAndOpenBudget();
+
+    await user.selectOptions(screen.getByLabelText(/Employment status/i), 'selfEmployed');
+    expect(
+      screen.getByRole('textbox', { name: /Months running the business/i }),
+    ).toBeInTheDocument();
+
+    await user.selectOptions(screen.getByLabelText(/Employment status/i), 'retired');
+    await user.selectOptions(screen.getByLabelText(/Income source/i), 'rentalIncome');
+    expect(
+      screen.getByRole('textbox', { name: /Months receiving this income/i }),
+    ).toBeInTheDocument();
+  });
+
   it('locks income at 0.00 when No income is selected', async () => {
     const { user } = seedLoanAndOpenBudget();
 
@@ -224,6 +239,18 @@ describe('YourBudgetScreen', () => {
     expect(store.getState().journey.demoCreditScore).toBe(firstScore);
   });
 
+  it('shows loan details unavailable when the budget opens without a submitted loan', () => {
+    const store = createAppStore();
+    store.dispatch(setCurrentScreen(JOURNEY_SCREENS.yourBudget));
+    render(
+      <Provider store={store}>
+        <App />
+      </Provider>,
+    );
+
+    expect(screen.getByTestId('loan-summary')).toHaveTextContent('Loan details unavailable');
+  });
+
   it('shows Checking… while the mock eligibility request is in flight', async () => {
     let resolveCheck: ((value: eligibilityService.EligibilityCheckResult) => void) | undefined;
     vi.spyOn(eligibilityService, 'checkEligibility').mockImplementation(
@@ -244,6 +271,76 @@ describe('YourBudgetScreen', () => {
     await waitFor(() => {
       expect(screen.getByTestId('your-result-screen')).toBeInTheDocument();
     });
+  });
+
+  it('shows a check-failed banner and retries when eligibility returns ok false', async () => {
+    const checkSpy = vi
+      .spyOn(eligibilityService, 'checkEligibility')
+      .mockImplementationOnce(async ({ requestId }) => ({
+        ok: false as const,
+        requestId,
+        message: eligibilityService.ELIGIBILITY_CHECK_FAILED_MESSAGE,
+      }))
+      .mockImplementationOnce(async ({ requestId }) => ({
+        ok: true as const,
+        requestId,
+      }));
+
+    const { user } = seedLoanAndOpenBudget();
+    await fillRequiredEmployedFields(user);
+    await user.type(screen.getByRole('textbox', { name: /^Credit score/i }), '650');
+    await user.click(screen.getByRole('button', { name: /Check estimated eligibility/i }));
+
+    expect(await screen.findByText('Check could not finish')).toBeInTheDocument();
+    expect(screen.getByText(eligibilityService.ELIGIBILITY_CHECK_FAILED_MESSAGE)).toBeInTheDocument();
+
+    await user.click(screen.getByRole('button', { name: /Try again/i }));
+    expect(await screen.findByTestId('your-result-screen')).toBeInTheDocument();
+    expect(checkSpy).toHaveBeenCalledTimes(2);
+  });
+
+  it('clears income-source fields when switching away from unemployed', async () => {
+    const { user } = seedLoanAndOpenBudget();
+
+    await user.selectOptions(screen.getByLabelText(/Employment status/i), 'unemployed');
+    await user.selectOptions(screen.getByLabelText(/Income source/i), 'rentalIncome');
+    expect(
+      screen.getByRole('textbox', { name: /Months receiving this income/i }),
+    ).toBeInTheDocument();
+
+    await user.selectOptions(screen.getByLabelText(/Employment status/i), 'employed');
+    expect(screen.queryByLabelText(/Income source/i)).not.toBeInTheDocument();
+    expect(
+      screen.queryByRole('textbox', { name: /Months receiving this income/i }),
+    ).not.toBeInTheDocument();
+  });
+
+  it('maps a thrown eligibility error to the failed banner', async () => {
+    vi.spyOn(eligibilityService, 'checkEligibility').mockRejectedValue(new Error('network down'));
+
+    const { user } = seedLoanAndOpenBudget();
+    await fillRequiredEmployedFields(user);
+    await user.type(screen.getByRole('textbox', { name: /^Credit score/i }), '650');
+    await user.click(screen.getByRole('button', { name: /Check estimated eligibility/i }));
+
+    expect(await screen.findByText('Check could not finish')).toBeInTheDocument();
+    expect(screen.getByText(eligibilityService.ELIGIBILITY_CHECK_FAILED_MESSAGE)).toBeInTheDocument();
+  });
+
+  it('ignores an aborted eligibility request without showing a failure banner', async () => {
+    vi.spyOn(eligibilityService, 'checkEligibility').mockRejectedValue(
+      new DOMException('Aborted', 'AbortError'),
+    );
+
+    const { user } = seedLoanAndOpenBudget();
+    await fillRequiredEmployedFields(user);
+    await user.type(screen.getByRole('textbox', { name: /^Credit score/i }), '650');
+    await user.click(screen.getByRole('button', { name: /Check estimated eligibility/i }));
+
+    await waitFor(() => {
+      expect(screen.queryByText('Check could not finish')).not.toBeInTheDocument();
+    });
+    expect(screen.getByTestId('your-budget-screen')).toBeInTheDocument();
   });
 });
 
