@@ -8,11 +8,7 @@ afterEach(() => {
   cleanup();
 });
 
-const StatefulAgeInput = ({
-  onChange,
-}: {
-  onChange?: (value: number | null) => void;
-}) => {
+const StatefulAgeInput = ({ onChange }: { onChange?: (value: number | null) => void }) => {
   const [value, setValue] = useState<number | null>(null);
 
   return (
@@ -109,8 +105,6 @@ describe('WholeNumberInput', () => {
       />,
     );
 
-    expect(screen.getByRole('alert')).toHaveTextContent(
-      'You must be between 18 and 65 years old.',
-    );
+    expect(screen.getByRole('alert')).toHaveTextContent('You must be between 18 and 65 years old.');
   });
 });

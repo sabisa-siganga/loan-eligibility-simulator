@@ -110,9 +110,7 @@ describe('YourBudgetScreen', () => {
     await user.type(screen.getByRole('textbox', { name: /^Credit score/i }), '650');
     await user.click(screen.getByRole('button', { name: /Check estimated eligibility/i }));
 
-    expect(
-      await screen.findByText('You must be between 18 and 65 years old.'),
-    ).toBeInTheDocument();
+    expect(await screen.findByText('You must be between 18 and 65 years old.')).toBeInTheDocument();
     expect(screen.getByTestId('your-budget-screen')).toBeInTheDocument();
     expect(checkSpy).not.toHaveBeenCalled();
   });
@@ -124,9 +122,7 @@ describe('YourBudgetScreen', () => {
     await user.type(screen.getByRole('textbox', { name: /^Credit score/i }), '650');
     await user.click(screen.getByRole('button', { name: /Check estimated eligibility/i }));
 
-    expect(
-      await screen.findByText('You must be between 18 and 65 years old.'),
-    ).toBeInTheDocument();
+    expect(await screen.findByText('You must be between 18 and 65 years old.')).toBeInTheDocument();
     expect(screen.getByTestId('your-budget-screen')).toBeInTheDocument();
   });
 
