@@ -29,3 +29,4 @@ coverage
 # TypeScript / tooling caches
 *.tsbuildinfo
 .eslintcache
+/docs/superpowers
