@@ -1,0 +1,78 @@
+@use '../../../styles/mixins' as *;
+@use '../../../styles/tokens' as *;
+
+.slider {
+  --slider-progress: 0%;
+  width: 100%;
+  height: $touch-min;
+  margin: 0;
+  appearance: none;
+  background: transparent;
+  cursor: pointer;
+
+  &::-webkit-slider-runnable-track {
+    height: 6px;
+    border-radius: 999px;
+    background: linear-gradient(
+      to right,
+      $color-primary 0%,
+      $color-primary var(--slider-progress),
+      $color-slider-remaining var(--slider-progress),
+      $color-slider-remaining 100%
+    );
+  }
+
+  &::-moz-range-track {
+    height: 6px;
+    border-radius: 999px;
+    background: $color-slider-remaining;
+  }
+
+  &::-moz-range-progress {
+    height: 6px;
+    border-radius: 999px;
+    background: $color-primary;
+  }
+
+  &::-webkit-slider-thumb {
+    appearance: none;
+    width: 24px;
+    height: 24px;
+    margin-top: -9px;
+    border: 2px solid $color-primary;
+    border-radius: 50%;
+    background: $color-surface;
+    transition: background-color $duration-color ease;
+  }
+
+  &::-moz-range-thumb {
+    width: 24px;
+    height: 24px;
+    border: 2px solid $color-primary;
+    border-radius: 50%;
+    background: $color-surface;
+    transition: background-color $duration-color ease;
+  }
+
+  &:hover::-webkit-slider-thumb,
+  &:active::-webkit-slider-thumb {
+    background: $color-light-blue-bg;
+  }
+
+  &:hover::-moz-range-thumb,
+  &:active::-moz-range-thumb {
+    background: $color-light-blue-bg;
+  }
+
+  &:focus-visible {
+    outline: none;
+  }
+
+  &:focus-visible::-webkit-slider-thumb {
+    @include focus-ring;
+  }
+
+  &:focus-visible::-moz-range-thumb {
+    @include focus-ring;
+  }
+}

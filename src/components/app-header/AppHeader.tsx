@@ -1,5 +1,6 @@
 import { forwardRef } from 'react';
 import { Calculator } from 'lucide-react';
+import { Button } from '../ui/button';
 import styles from './AppHeader.module.scss';
 
 type AppHeaderProps = {
@@ -16,14 +17,14 @@ const AppHeader = forwardRef<HTMLButtonElement, AppHeaderProps>(
           </span>
           <h1 className={styles.brandName}>Loan Eligibility Simulator</h1>
         </div>
-        <button
+        <Button
           ref={howItWorksRef}
-          type="button"
+          variant="soft"
           className={styles.howItWorks}
           onClick={onOpenHowItWorks}
         >
           How it works
-        </button>
+        </Button>
       </div>
     </header>
   ),

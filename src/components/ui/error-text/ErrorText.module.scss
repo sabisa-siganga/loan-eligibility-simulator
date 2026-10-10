@@ -1,0 +1,11 @@
+@use '../../../styles/tokens' as *;
+
+.error {
+  margin: 0;
+  display: flex;
+  align-items: flex-start;
+  gap: $space-2;
+  color: $color-error;
+  font-size: $font-size-helper;
+  line-height: 1.5;
+}

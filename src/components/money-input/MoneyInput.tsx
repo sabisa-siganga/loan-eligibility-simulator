@@ -7,6 +7,10 @@ import {
   parseWholeRandDigits,
   sanitizeMoneyPaste,
 } from '../../utils/formatMoney';
+import { ErrorText } from '../ui/error-text';
+import { HelperText } from '../ui/helper-text';
+import { Input } from '../ui/input';
+import { Label } from '../ui/label';
 import styles from './MoneyInput.module.scss';
 
 type MoneyInputProps = {
@@ -137,20 +141,13 @@ const MoneyInput = forwardRef<HTMLInputElement, MoneyInputProps>(
 
     return (
       <div className={styles.field}>
-        <label className={styles.label} htmlFor={inputId}>
+        <Label htmlFor={inputId} required={required}>
           {label}
-          {required ? (
-            <span className={styles.required} aria-hidden="true">
-              {' '}
-              *
-            </span>
-          ) : null}
-        </label>
-        <input
+        </Label>
+        <Input
           ref={ref}
           id={inputId}
           name={name}
-          className={styles.input}
           inputMode="numeric"
           autoComplete="off"
           readOnly={readOnly}
@@ -167,16 +164,8 @@ const MoneyInput = forwardRef<HTMLInputElement, MoneyInputProps>(
           onPaste={handlePaste}
           onKeyDown={handleKeyDown}
         />
-        {helperText ? (
-          <p id={helperId} className={styles.helper}>
-            {helperText}
-          </p>
-        ) : null}
-        {shownError ? (
-          <p id={errorId} className={styles.error} role="alert">
-            {shownError}
-          </p>
-        ) : null}
+        {helperText ? <HelperText id={helperId}>{helperText}</HelperText> : null}
+        {shownError ? <ErrorText id={errorId}>{shownError}</ErrorText> : null}
       </div>
     );
   },

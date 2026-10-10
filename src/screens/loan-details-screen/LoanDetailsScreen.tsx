@@ -3,7 +3,7 @@ import { Controller, useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import EstimateSummaryCard from '../../components/estimate-summary-card';
 import LinkedSliderField from '../../components/linked-slider-field';
-import SelectField from '../../components/select-field';
+import { Select } from '../../components/ui/select';
 import { useAppDispatch, useAppSelector } from '../../store/hooks';
 import { submitLoanDetails } from '../../store/journeySlice';
 import { selectSubmittedLoanDetails } from '../../store/journeySelectors';
@@ -170,7 +170,7 @@ const LoanDetailsScreen = () => {
             name="purpose"
             control={control}
             render={({ field, fieldState }) => (
-              <SelectField
+              <Select
                 ref={field.ref}
                 label="Loan purpose"
                 name={field.name}

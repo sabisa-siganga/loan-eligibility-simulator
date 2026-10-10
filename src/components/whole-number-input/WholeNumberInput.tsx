@@ -1,6 +1,10 @@
 import { forwardRef, useId } from 'react';
 import type { ChangeEvent, ClipboardEvent, KeyboardEvent } from 'react';
 import { isWholeRandDigitString, sanitizeMoneyPaste } from '../../utils/formatMoney';
+import { ErrorText } from '../ui/error-text';
+import { HelperText } from '../ui/helper-text';
+import { Input } from '../ui/input';
+import { Label } from '../ui/label';
 import styles from './WholeNumberInput.module.scss';
 
 type WholeNumberInputProps = {
@@ -66,20 +70,13 @@ const WholeNumberInput = forwardRef<HTMLInputElement, WholeNumberInputProps>(
 
     return (
       <div className={styles.field}>
-        <label className={styles.label} htmlFor={inputId}>
+        <Label htmlFor={inputId} required={required}>
           {label}
-          {required ? (
-            <span className={styles.required} aria-hidden="true">
-              {' '}
-              *
-            </span>
-          ) : null}
-        </label>
-        <input
+        </Label>
+        <Input
           ref={ref}
           id={inputId}
           name={name}
-          className={styles.input}
           inputMode="numeric"
           autoComplete="off"
           value={value === null ? '' : String(value)}
@@ -94,16 +91,8 @@ const WholeNumberInput = forwardRef<HTMLInputElement, WholeNumberInputProps>(
           onPaste={handlePaste}
           onKeyDown={handleKeyDown}
         />
-        {helperText ? (
-          <p id={helperId} className={styles.helper}>
-            {helperText}
-          </p>
-        ) : null}
-        {error ? (
-          <p id={errorId} className={styles.error} role="alert">
-            {error}
-          </p>
-        ) : null}
+        {helperText ? <HelperText id={helperId}>{helperText}</HelperText> : null}
+        {error ? <ErrorText id={errorId}>{error}</ErrorText> : null}
       </div>
     );
   },

@@ -1,0 +1,17 @@
+@use '../../../styles/mixins' as *;
+
+.primary {
+  @include button-primary;
+}
+
+.secondary {
+  @include button-secondary;
+}
+
+.soft {
+  @include button-soft;
+}
+
+.link {
+  @include button-text;
+}

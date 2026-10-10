@@ -4,6 +4,7 @@ import { ArrowRight, ChevronDown, Info } from 'lucide-react';
 import type { RepaymentEstimate } from '../../types/loan';
 import { formatMoneyDisplay, formatTermLabel } from '../../utils/formatMoney';
 import { PRODUCT_SETTINGS } from '../../utils/productSettings';
+import { Button } from '../ui/button';
 import styles from './EstimateSummaryCard.module.scss';
 
 type EstimateSummaryCardProps = {
@@ -155,13 +156,13 @@ const EstimateSummaryCard = ({
                   {PRODUCT_SETTINGS.exploreRateMin}% – {PRODUCT_SETTINGS.exploreRateMax}%
                 </span>
                 {annualRate !== PRODUCT_SETTINGS.exampleAnnualRate ? (
-                  <button
-                    type="button"
+                  <Button
+                    variant="link"
                     className={styles.restoreButton}
                     onClick={() => onAnnualRateChange(PRODUCT_SETTINGS.exampleAnnualRate)}
                   >
                     Restore {PRODUCT_SETTINGS.exampleAnnualRate}% example rate
-                  </button>
+                  </Button>
                 ) : null}
               </div>
             </div>
@@ -176,10 +177,10 @@ const EstimateSummaryCard = ({
         <span>Affordability has not been checked yet.</span>
       </div>
 
-      <button type="button" className={styles.continue} onClick={onContinue}>
+      <Button className={styles.continue} onClick={onContinue}>
         Continue to your budget
         <ArrowRight size={18} aria-hidden="true" />
-      </button>
+      </Button>
     </aside>
   );
 };

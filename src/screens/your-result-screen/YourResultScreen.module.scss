@@ -360,14 +360,6 @@
   margin-top: $space-6;
 }
 
-.editButton {
-  @include button-secondary;
-}
-
-.startAgain {
-  @include button-text;
-}
-
 @include respond-below($bp-stack) {
   .layout {
     grid-template-columns: 1fr;
