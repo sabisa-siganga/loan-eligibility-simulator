@@ -9,9 +9,15 @@ import {
 } from '../../utils/formatMoney';
 import { ErrorText } from '../ui/error-text';
 import { HelperText } from '../ui/helper-text';
-import { Input } from '../ui/input';
+import {
+  InputGroup,
+  InputGroupAddon,
+  InputGroupInput,
+  InputGroupText,
+} from '../ui/input-group';
 import { Label } from '../ui/label';
 import styles from './MoneyInput.module.scss';
+
 
 type MoneyInputProps = {
   label: string;
@@ -145,27 +151,33 @@ const MoneyInput = forwardRef<HTMLInputElement, MoneyInputProps>(
         <Label htmlFor={inputId} required={required}>
           {label}
         </Label>
-        <Input
-          ref={ref}
-          id={inputId}
-          name={name}
-          inputMode="numeric"
-          autoComplete="off"
-          readOnly={readOnly}
-          value={displayValue}
-          aria-invalid={shownError ? true : undefined}
-          aria-describedby={
-            [showHelperText ? helperId : null, shownError ? errorId : null]
-              .filter(Boolean)
-              .join(' ') || undefined
-          }
-          aria-required={required || undefined}
-          onFocus={handleFocus}
-          onBlur={handleBlur}
-          onChange={handleChange}
-          onPaste={handlePaste}
-          onKeyDown={handleKeyDown}
-        />
+        <InputGroup>
+          <InputGroupInput
+            ref={ref}
+            id={inputId}
+            name={name}
+            inputMode="numeric"
+            autoComplete="off"
+            readOnly={readOnly}
+            value={displayValue}
+            aria-invalid={shownError ? true : undefined}
+            aria-describedby={
+              [showHelperText ? helperId : null, shownError ? errorId : null]
+                .filter(Boolean)
+                .join(' ') || undefined
+            }
+            aria-required={required || undefined}
+            onFocus={handleFocus}
+            onBlur={handleBlur}
+            onChange={handleChange}
+            onPaste={handlePaste}
+            onKeyDown={handleKeyDown}
+          />
+          <InputGroupAddon align="inline-start">
+            <InputGroupText aria-hidden="true">R</InputGroupText>
+          </InputGroupAddon>
+        </InputGroup>
+
         {showHelperText ? <HelperText id={helperId}>{helperText}</HelperText> : null}
         {shownError ? <ErrorText id={errorId}>{shownError}</ErrorText> : null}
       </div>
