@@ -5,9 +5,6 @@ import { Input } from './Input';
 describe('Input', () => {
   it('forwards aria-invalid to the native input', () => {
     render(<Input aria-label="Amount" aria-invalid />);
-    expect(screen.getByRole('textbox', { name: 'Amount' })).toHaveAttribute(
-      'aria-invalid',
-      'true',
-    );
+    expect(screen.getByRole('textbox', { name: 'Amount' })).toHaveAttribute('aria-invalid', 'true');
   });
 });

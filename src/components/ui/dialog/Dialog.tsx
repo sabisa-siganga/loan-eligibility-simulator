@@ -20,13 +20,7 @@ const FOCUSABLE_SELECTOR = [
   '[tabindex]:not([tabindex="-1"])',
 ].join(', ');
 
-export const Dialog = ({
-  isOpen,
-  onClose,
-  title,
-  children,
-  closeLabel = 'Close',
-}: DialogProps) => {
+export const Dialog = ({ isOpen, onClose, title, children, closeLabel = 'Close' }: DialogProps) => {
   const titleId = useId();
   const dialogRef = useRef<HTMLDivElement>(null);
   const closeButtonRef = useRef<HTMLButtonElement>(null);
