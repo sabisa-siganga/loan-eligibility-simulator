@@ -1,8 +1,8 @@
 import { forwardRef, useId } from 'react';
 import type { ChangeEvent } from 'react';
-import styles from './CheckboxField.module.scss';
+import styles from './Checkbox.module.scss';
 
-type CheckboxFieldProps = {
+export type CheckboxProps = {
   label: string;
   checked: boolean;
   onChange: (checked: boolean) => void;
@@ -11,7 +11,7 @@ type CheckboxFieldProps = {
   id?: string;
 };
 
-const CheckboxField = forwardRef<HTMLInputElement, CheckboxFieldProps>(
+export const Checkbox = forwardRef<HTMLInputElement, CheckboxProps>(
   ({ label, checked, onChange, onBlur, name, id }, ref) => {
     const generatedId = useId();
     const inputId = id ?? generatedId;
@@ -40,6 +40,4 @@ const CheckboxField = forwardRef<HTMLInputElement, CheckboxFieldProps>(
   },
 );
 
-CheckboxField.displayName = 'CheckboxField';
-
-export default CheckboxField;
+Checkbox.displayName = 'Checkbox';

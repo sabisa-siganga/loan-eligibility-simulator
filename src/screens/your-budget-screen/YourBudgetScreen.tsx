@@ -3,7 +3,7 @@ import { Controller, useForm, useWatch } from 'react-hook-form';
 import type { Resolver } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { AlertCircle, ArrowRight, Calculator, Shield, User } from 'lucide-react';
-import CheckboxField from '../../components/checkbox-field';
+import { Checkbox } from '../../components/ui/checkbox';
 import MoneyInput from '../../components/money-input';
 import SelectField from '../../components/select-field';
 import WholeNumberInput from '../../components/whole-number-input';
@@ -507,7 +507,7 @@ const YourBudgetScreen = () => {
                 name="creditScoreUnknown"
                 control={control}
                 render={({ field }) => (
-                  <CheckboxField
+                  <Checkbox
                     ref={field.ref}
                     label="I don't know my credit score"
                     name={field.name}
@@ -524,7 +524,7 @@ const YourBudgetScreen = () => {
                   name="requestDemoCreditCheck"
                   control={control}
                   render={({ field }) => (
-                    <CheckboxField
+                    <Checkbox
                       ref={field.ref}
                       label="Check my credit score"
                       name={field.name}
