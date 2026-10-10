@@ -1,5 +1,5 @@
 import { forwardRef, useId, useState } from 'react';
-import type { CSSProperties, ChangeEvent, ClipboardEvent, KeyboardEvent } from 'react';
+import type { ChangeEvent, ClipboardEvent, KeyboardEvent } from 'react';
 import {
   formatMoneyInputBlur,
   formatMoneyInputFocus,
@@ -7,6 +7,10 @@ import {
   parseWholeRandDigits,
   sanitizeMoneyPaste,
 } from '../../utils/formatMoney';
+import { ErrorText } from '../ui/error-text';
+import { Input } from '../ui/input';
+import { Label } from '../ui/label';
+import { Slider } from '../ui/slider';
 import styles from './LinkedSliderField.module.scss';
 
 type LinkedSliderFieldProps = {
@@ -55,8 +59,6 @@ const LinkedSliderField = forwardRef<HTMLInputElement, LinkedSliderFieldProps>(
     const [pasteError, setPasteError] = useState<string | undefined>();
 
     const sliderValue = value !== null && value >= min && value <= max ? value : min;
-    const sliderProgress =
-      max === min ? 0 : Math.min(100, Math.max(0, ((sliderValue - min) / (max - min)) * 100));
 
     const displayValue = (() => {
       if (isFocused) {
@@ -149,20 +151,13 @@ const LinkedSliderField = forwardRef<HTMLInputElement, LinkedSliderFieldProps>(
 
     return (
       <div className={styles.field}>
-        <label className={styles.label} htmlFor={inputId}>
+        <Label htmlFor={inputId} required={required}>
           {label}
-          {required ? (
-            <span className={styles.required} aria-hidden="true">
-              {' '}
-              *
-            </span>
-          ) : null}
-        </label>
-        <input
+        </Label>
+        <Input
           ref={ref}
           id={inputId}
           name={name}
-          className={styles.input}
           inputMode="numeric"
           autoComplete="off"
           value={displayValue}
@@ -176,15 +171,12 @@ const LinkedSliderField = forwardRef<HTMLInputElement, LinkedSliderFieldProps>(
           onKeyDown={handleKeyDown}
         />
         <div className={styles.sliderRow}>
-          <input
+          <Slider
             id={sliderId}
-            className={styles.slider}
-            type="range"
             min={min}
             max={max}
             step={step}
             value={sliderValue}
-            style={{ '--slider-progress': `${sliderProgress}%` } as CSSProperties}
             aria-label={`Adjust ${label}`}
             aria-valuemin={min}
             aria-valuemax={max}
@@ -196,11 +188,7 @@ const LinkedSliderField = forwardRef<HTMLInputElement, LinkedSliderFieldProps>(
             <span>{maxLabel}</span>
           </div>
         </div>
-        {shownError ? (
-          <p id={errorId} className={styles.error} role="alert">
-            {shownError}
-          </p>
-        ) : null}
+        {shownError ? <ErrorText id={errorId}>{shownError}</ErrorText> : null}
       </div>
     );
   },
