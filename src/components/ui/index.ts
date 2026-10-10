@@ -6,7 +6,16 @@ export { ErrorText } from './error-text';
 export type { ErrorTextProps } from './error-text';
 export { Input } from './input';
 export type { InputProps } from './input';
+export { InputGroup, InputGroupAddon, InputGroupInput, InputGroupText } from './input-group';
+export type {
+  InputGroupAddonAlign,
+  InputGroupAddonProps,
+  InputGroupInputProps,
+  InputGroupProps,
+  InputGroupTextProps,
+} from './input-group';
 export { Button } from './button';
+
 export type { ButtonProps, ButtonVariant } from './button';
 export { Select } from './select';
 export type { SelectProps, SelectOption } from './select';

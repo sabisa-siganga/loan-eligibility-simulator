@@ -1,0 +1,129 @@
+@use '../../../styles/mixins' as *;
+@use '../../../styles/tokens' as *;
+
+.group {
+  display: flex;
+  align-items: center;
+  gap: $space-2;
+  width: 100%;
+  min-height: $control-min-height;
+  padding: 0 14px;
+  border: 1px solid $color-input-border;
+  border-radius: $radius-input;
+  background: $color-surface;
+  color: $color-text;
+  font-family: inherit;
+  font-size: $font-size-field;
+  font-weight: 400;
+  line-height: 1.5;
+  transition:
+    border-color $duration-color ease,
+    box-shadow $duration-color ease;
+
+  @include respond-below($bp-fields) {
+    font-size: $font-size-field-mobile;
+  }
+
+  &:hover:not(:has(:disabled)):not(:has(:read-only)):not(:focus-within) {
+    border-color: $color-input-hover-border;
+  }
+
+  &:focus-within {
+    border-color: $color-primary;
+  }
+
+  &:focus-within:has(:focus-visible) {
+    outline: none;
+    border-color: $color-primary;
+    box-shadow: 0 0 0 $focus-ring-width $focus-ring-color;
+  }
+
+  &:has(:disabled) {
+    background: $color-muted-surface;
+    color: $color-disabled-text;
+    cursor: not-allowed;
+  }
+
+  &:has(:read-only) {
+    background: $color-muted-surface;
+    color: $color-text;
+  }
+
+  &:has([aria-invalid='true']) {
+    border-color: $color-error-border;
+
+    &:hover:not(:has(:disabled)):not(:has(:read-only)):not(:focus-within) {
+      border-color: $color-error-border;
+    }
+
+    &:focus-within {
+      border-color: $color-error-border;
+    }
+
+    &:focus-within:has(:focus-visible) {
+      outline: none;
+      border-color: $color-error-border;
+      box-shadow: 0 0 0 $focus-ring-width $focus-ring-color-invalid;
+    }
+  }
+}
+
+.control {
+  order: 0;
+  flex: 1 1 auto;
+  width: 100%;
+  min-width: 0;
+  min-height: calc(#{$control-min-height} - 2px);
+  padding: 0;
+  border: none;
+  border-radius: 0;
+  background: transparent;
+  color: inherit;
+  font-family: inherit;
+  font-size: inherit;
+  font-weight: inherit;
+  line-height: inherit;
+  text-align: left;
+
+  &:focus,
+  &:focus-visible {
+    outline: none;
+    box-shadow: none;
+  }
+
+  &:disabled {
+    background: transparent;
+    color: inherit;
+    cursor: not-allowed;
+  }
+
+  &:read-only {
+    background: transparent;
+    color: inherit;
+  }
+}
+
+.addon {
+  display: inline-flex;
+  flex-shrink: 0;
+  align-items: center;
+  color: $color-text-secondary;
+}
+
+.addonInlineStart {
+  order: -1;
+}
+
+.addonInlineEnd {
+  order: 1;
+}
+
+.text {
+  display: inline-flex;
+  align-items: center;
+  color: $color-text-secondary;
+  font-size: inherit;
+  line-height: inherit;
+  white-space: nowrap;
+  user-select: none;
+}

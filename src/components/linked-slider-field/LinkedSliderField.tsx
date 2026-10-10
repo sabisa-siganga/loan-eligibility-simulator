@@ -9,6 +9,7 @@ import {
 } from '../../utils/formatMoney';
 import { ErrorText } from '../ui/error-text';
 import { Input } from '../ui/input';
+import { InputGroup, InputGroupAddon, InputGroupInput, InputGroupText } from '../ui/input-group';
 import { Label } from '../ui/label';
 import { Slider } from '../ui/slider';
 import styles from './LinkedSliderField.module.scss';
@@ -149,27 +150,38 @@ const LinkedSliderField = forwardRef<HTMLInputElement, LinkedSliderFieldProps>(
       onChange(Number(event.target.value));
     };
 
+    const inputProps = {
+      id: inputId,
+      name,
+      inputMode: 'numeric' as const,
+      autoComplete: 'off' as const,
+      value: displayValue,
+      'aria-invalid': shownError ? true : undefined,
+      'aria-describedby': shownError ? errorId : undefined,
+      'aria-required': required || undefined,
+      onFocus: handleFocus,
+      onBlur: handleBlur,
+      onChange: handleInputChange,
+      onPaste: handlePaste,
+      onKeyDown: handleKeyDown,
+    };
+
     return (
       <div className={styles.field}>
         <Label htmlFor={inputId} required={required}>
           {label}
         </Label>
-        <Input
-          ref={ref}
-          id={inputId}
-          name={name}
-          inputMode="numeric"
-          autoComplete="off"
-          value={displayValue}
-          aria-invalid={shownError ? true : undefined}
-          aria-describedby={shownError ? errorId : undefined}
-          aria-required={required || undefined}
-          onFocus={handleFocus}
-          onBlur={handleBlur}
-          onChange={handleInputChange}
-          onPaste={handlePaste}
-          onKeyDown={handleKeyDown}
-        />
+        {mode === 'money' ? (
+          <InputGroup>
+            <InputGroupInput ref={ref} {...inputProps} />
+            <InputGroupAddon align="inline-start">
+              <InputGroupText aria-hidden="true">R</InputGroupText>
+            </InputGroupAddon>
+          </InputGroup>
+        ) : (
+          <Input ref={ref} {...inputProps} />
+        )}
+
         <div className={styles.sliderRow}>
           <Slider
             id={sliderId}
