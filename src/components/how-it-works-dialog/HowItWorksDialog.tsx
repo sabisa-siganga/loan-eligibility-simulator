@@ -1,4 +1,4 @@
-import { useEffect, useId, useRef } from 'react';
+import { Dialog } from '../ui/dialog';
 import styles from './HowItWorksDialog.module.scss';
 
 type HowItWorksDialogProps = {
@@ -6,111 +6,22 @@ type HowItWorksDialogProps = {
   onClose: () => void;
 };
 
-const FOCUSABLE_SELECTOR = [
-  'a[href]',
-  'button:not([disabled])',
-  'textarea:not([disabled])',
-  'input:not([disabled])',
-  'select:not([disabled])',
-  '[tabindex]:not([tabindex="-1"])',
-].join(', ');
-
-const HowItWorksDialog = ({ isOpen, onClose }: HowItWorksDialogProps) => {
-  const titleId = useId();
-  const dialogRef = useRef<HTMLDivElement>(null);
-  const closeButtonRef = useRef<HTMLButtonElement>(null);
-
-  useEffect(() => {
-    if (!isOpen) {
-      return undefined;
-    }
-
-    const previousOverflow = document.body.style.overflow;
-    document.body.style.overflow = 'hidden';
-    closeButtonRef.current?.focus();
-
-    const onKeyDown = (event: KeyboardEvent) => {
-      if (event.key === 'Escape') {
-        onClose();
-        return;
-      }
-
-      if (event.key !== 'Tab' || !dialogRef.current) {
-        return;
-      }
-
-      const focusable = Array.from(
-        dialogRef.current.querySelectorAll<HTMLElement>(FOCUSABLE_SELECTOR),
-      ).filter((element) => !element.hasAttribute('disabled') && element.tabIndex !== -1);
-
-      if (focusable.length === 0) {
-        event.preventDefault();
-        return;
-      }
-
-      const first = focusable[0];
-      const last = focusable[focusable.length - 1];
-      const active = document.activeElement as HTMLElement | null;
-
-      if (event.shiftKey) {
-        if (active === first || !dialogRef.current.contains(active)) {
-          event.preventDefault();
-          last.focus();
-        }
-        return;
-      }
-
-      if (active === last) {
-        event.preventDefault();
-        first.focus();
-      }
-    };
-
-    window.addEventListener('keydown', onKeyDown);
-    return () => {
-      document.body.style.overflow = previousOverflow;
-      window.removeEventListener('keydown', onKeyDown);
-    };
-  }, [isOpen, onClose]);
-
-  if (!isOpen) {
-    return null;
-  }
-
-  return (
-    <div className={styles.backdrop} onClick={onClose} role="presentation">
-      <div
-        ref={dialogRef}
-        className={styles.dialog}
-        role="dialog"
-        aria-modal="true"
-        aria-labelledby={titleId}
-        onClick={(event) => event.stopPropagation()}
-      >
-        <h2 id={titleId} className={styles.title}>
-          How it works
-        </h2>
-        <ol className={styles.list}>
-          <li>Choose a loan amount, term and purpose to explore estimated repayments.</li>
-          <li>
-            Enter your take-home income, living costs and debt repayments. Count each cost once —
-            rent belongs under living expenses, home-loan repayments under debt.
-          </li>
-          <li>
-            Review whether the loan could fit your budget, then adjust amount or term if needed.
-          </li>
-          <li>
-            Estimates include interest but exclude fees and insurance. A longer term can lower the
-            monthly repayment but increase total interest.
-          </li>
-          <li>Refreshing the page clears the details you entered on this device.</li>
-        </ol>
-        <button ref={closeButtonRef} type="button" className={styles.close} onClick={onClose}>
-          Close
-        </button>
-      </div>
-    </div>
-  );
-};
+const HowItWorksDialog = ({ isOpen, onClose }: HowItWorksDialogProps) => (
+  <Dialog isOpen={isOpen} onClose={onClose} title="How it works">
+    <ol className={styles.list}>
+      <li>Choose a loan amount, term and purpose to explore estimated repayments.</li>
+      <li>
+        Enter your take-home income, living costs and debt repayments. Count each cost once — rent
+        belongs under living expenses, home-loan repayments under debt.
+      </li>
+      <li>Review whether the loan could fit your budget, then adjust amount or term if needed.</li>
+      <li>
+        Estimates include interest but exclude fees and insurance. A longer term can lower the
+        monthly repayment but increase total interest.
+      </li>
+      <li>Refreshing the page clears the details you entered on this device.</li>
+    </ol>
+  </Dialog>
+);
 
 export default HowItWorksDialog;

@@ -1,44 +1,7 @@
-@use '../../styles/mixins' as *;
 @use '../../styles/tokens' as *;
 
-.backdrop {
-  position: fixed;
-  inset: 0;
-  z-index: 1000;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: $space-4;
-  background: $color-overlay;
-}
-
-.dialog {
-  display: flex;
-  flex-direction: column;
-  width: min(100%, $dialog-max);
-  max-height: calc(100vh - #{$space-4 * 2});
-  overflow: auto;
-  padding: $space-5;
-  border-radius: $radius-dialog;
-  background: $color-surface;
-
-  @include respond-below($bp-fields) {
-    padding: 20px;
-    margin-inline: $space-4;
-    max-height: calc(100vh - #{$space-4 * 2});
-  }
-}
-
-.title {
-  margin: 0 0 $space-3;
-  color: $color-text;
-  font-size: $font-size-section;
-  font-weight: 700;
-  line-height: 1.3;
-}
-
 .list {
-  margin: 0 0 $space-5;
+  margin: 0;
   padding-left: 1.25rem;
   color: $color-text-secondary;
   font-size: $font-size-body;
@@ -47,10 +10,4 @@
 
 .list li + li {
   margin-top: $space-2;
-}
-
-.close {
-  @include button-primary;
-  width: 100%;
-  min-height: $touch-min;
 }
