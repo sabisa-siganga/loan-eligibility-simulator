@@ -54,6 +54,7 @@ describe('LoanDetailsScreen', () => {
     await user.click(screen.getByRole('button', { name: /Continue to your budget/i }));
 
     expect(await screen.findByText('Select a loan purpose.')).toBeInTheDocument();
+    expect(screen.queryByText('Purpose does not change this estimate.')).not.toBeInTheDocument();
     expect(screen.getByLabelText(/Loan purpose/i)).toHaveFocus();
     expect(screen.getByTestId('loan-details-screen')).toBeInTheDocument();
   });

@@ -53,6 +53,7 @@ const MoneyInput = forwardRef<HTMLInputElement, MoneyInputProps>(
     const displayValue = isFocused ? draft : value === null ? '' : formatMoneyInputBlur(value);
 
     const shownError = error ?? pasteError;
+    const showHelperText = Boolean(helperText) && !shownError;
 
     const handleFocus = () => {
       if (readOnly) {
@@ -154,8 +155,9 @@ const MoneyInput = forwardRef<HTMLInputElement, MoneyInputProps>(
           value={displayValue}
           aria-invalid={shownError ? true : undefined}
           aria-describedby={
-            [helperText ? helperId : null, shownError ? errorId : null].filter(Boolean).join(' ') ||
-            undefined
+            [showHelperText ? helperId : null, shownError ? errorId : null]
+              .filter(Boolean)
+              .join(' ') || undefined
           }
           aria-required={required || undefined}
           onFocus={handleFocus}
@@ -164,7 +166,7 @@ const MoneyInput = forwardRef<HTMLInputElement, MoneyInputProps>(
           onPaste={handlePaste}
           onKeyDown={handleKeyDown}
         />
-        {helperText ? <HelperText id={helperId}>{helperText}</HelperText> : null}
+        {showHelperText ? <HelperText id={helperId}>{helperText}</HelperText> : null}
         {shownError ? <ErrorText id={errorId}>{shownError}</ErrorText> : null}
       </div>
     );

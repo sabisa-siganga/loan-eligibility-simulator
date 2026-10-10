@@ -46,6 +46,7 @@ export const Select = forwardRef<HTMLSelectElement, SelectProps>(
     const selectId = id ?? generatedId;
     const errorId = `${selectId}-error`;
     const helperId = `${selectId}-helper`;
+    const showHelperText = Boolean(helperText) && !error;
 
     const handleChange = (event: ChangeEvent<HTMLSelectElement>) => {
       onChange(event.target.value);
@@ -67,7 +68,7 @@ export const Select = forwardRef<HTMLSelectElement, SelectProps>(
             value={value}
             aria-invalid={error ? true : undefined}
             aria-describedby={
-              [helperText ? helperId : null, error ? errorId : null].filter(Boolean).join(' ') ||
+              [showHelperText ? helperId : null, error ? errorId : null].filter(Boolean).join(' ') ||
               undefined
             }
             aria-required={required || undefined}
@@ -83,7 +84,7 @@ export const Select = forwardRef<HTMLSelectElement, SelectProps>(
           </select>
           <ChevronDown className={styles.chevron} size={18} aria-hidden="true" />
         </div>
-        {helperText ? (
+        {showHelperText ? (
           <HelperText id={helperId}>
             <Info size={16} aria-hidden="true" />
             <span>{helperText}</span>

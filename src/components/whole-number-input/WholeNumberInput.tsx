@@ -25,6 +25,7 @@ const WholeNumberInput = forwardRef<HTMLInputElement, WholeNumberInputProps>(
     const inputId = id ?? generatedId;
     const errorId = `${inputId}-error`;
     const helperId = `${inputId}-helper`;
+    const showHelperText = Boolean(helperText) && !error;
 
     const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
       const next = event.target.value;
@@ -82,7 +83,7 @@ const WholeNumberInput = forwardRef<HTMLInputElement, WholeNumberInputProps>(
           value={value === null ? '' : String(value)}
           aria-invalid={error ? true : undefined}
           aria-describedby={
-            [helperText ? helperId : null, error ? errorId : null].filter(Boolean).join(' ') ||
+            [showHelperText ? helperId : null, error ? errorId : null].filter(Boolean).join(' ') ||
             undefined
           }
           aria-required={required || undefined}
@@ -91,7 +92,7 @@ const WholeNumberInput = forwardRef<HTMLInputElement, WholeNumberInputProps>(
           onPaste={handlePaste}
           onKeyDown={handleKeyDown}
         />
-        {helperText ? <HelperText id={helperId}>{helperText}</HelperText> : null}
+        {showHelperText ? <HelperText id={helperId}>{helperText}</HelperText> : null}
         {error ? <ErrorText id={errorId}>{error}</ErrorText> : null}
       </div>
     );
