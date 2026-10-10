@@ -34,9 +34,9 @@ Open the URL printed in the terminal (usually `http://localhost:5173`).
 | `npm run build`        | Production build               |
 | `npm run preview`      | Preview the production build   |
 
-## Confirmed starting values (for later implementation)
+## Confirmed starting values
 
-These defaults are not wired into forms yet. Recorded for Screen 1 work:
+Screen 1 uses these defaults on load and after Cancel / Start again / reload:
 
 | Field                         | Starting value |
 | ----------------------------- | -------------- |
@@ -62,11 +62,11 @@ Keep financial information out of URLs, logs, and analytics. No secrets or banki
 
 ## Design references
 
-Selected layouts (do not use the later “Plan your personal loan” redesign):
+Selected layout under `documents/` (do not use the later “Plan your personal loan” redesign):
 
-1. `Loan eligibility simulator interface in blue.png` — Screen 1
-2. `Loan eligibility budget check screen.png` — Screen 2
-3. `Loan Eligibility Simulator Mockup.png` — Screen 3
+| Screen         | File                                         |
+| -------------- | -------------------------------------------- |
+| 1 Loan details | `ChatGPT Image Oct 9, 2026, 03_52_05 PM.png` |
 
 Confirmed theme tokens (primary `#2F70EF`, Nunito Sans) override sampled colours/fonts from those images.
 
@@ -80,4 +80,4 @@ React, Vite, TypeScript (strict), SCSS Modules, Redux Toolkit, React Hook Form, 
 
 ## Current scope
 
-This repository currently contains the project foundation and a minimal app shell. Loan screens, calculations, and eligibility rules are not implemented yet.
+Screen 1 (loan details) is implemented: amount/term/purpose inputs, live repayment estimate with explore-rate control, and continue into the journey. Budget and result screens are not wired yet.

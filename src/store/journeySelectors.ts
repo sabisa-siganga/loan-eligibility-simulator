@@ -4,3 +4,5 @@ import { JOURNEY_SCREEN_LABELS } from './journeySlice';
 export { JOURNEY_SCREEN_LABELS };
 
 export const selectCurrentScreen = (state: RootState) => state.journey.currentScreen;
+
+export const selectSubmittedLoanDetails = (state: RootState) => state.journey.submittedLoanDetails;

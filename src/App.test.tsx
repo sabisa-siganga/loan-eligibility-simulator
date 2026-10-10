@@ -22,24 +22,33 @@ describe('App shell', () => {
     renderApp();
 
     expect(screen.getByRole('heading', { name: 'Loan Eligibility Simulator' })).toBeInTheDocument();
-    expect(screen.getByTestId('current-screen')).toHaveTextContent('Loan details');
+    expect(screen.getByTestId('loan-details-screen')).toBeInTheDocument();
   });
 
   it('returns to Loan details when the journey is reset', () => {
     const store = createAppStore({
-      journey: { currentScreen: JOURNEY_SCREENS.yourBudget },
+      journey: {
+        currentScreen: JOURNEY_SCREENS.yourBudget,
+        submittedLoanDetails: {
+          amount: 50_000,
+          termMonths: 24,
+          purpose: 'homeImprovement',
+          annualRateUsed: 12.5,
+        },
+      },
     });
 
     renderApp(store);
 
-    expect(screen.getByTestId('current-screen')).toHaveTextContent('Your budget');
+    expect(screen.queryByTestId('loan-details-screen')).not.toBeInTheDocument();
 
     act(() => {
       store.dispatch(resetJourney());
     });
 
-    expect(screen.getByTestId('current-screen')).toHaveTextContent('Loan details');
+    expect(screen.getByTestId('loan-details-screen')).toBeInTheDocument();
     expect(store.getState().journey.currentScreen).toBe(JOURNEY_SCREENS.loanDetails);
+    expect(store.getState().journey.submittedLoanDetails).toBeNull();
   });
 
   it('keeps Loan details after navigating away and resetting', () => {
@@ -50,11 +59,11 @@ describe('App shell', () => {
     act(() => {
       store.dispatch(setCurrentScreen(JOURNEY_SCREENS.yourResult));
     });
-    expect(screen.getByTestId('current-screen')).toHaveTextContent('Your result');
+    expect(screen.queryByTestId('loan-details-screen')).not.toBeInTheDocument();
 
     act(() => {
       store.dispatch(resetJourney());
     });
-    expect(screen.getByTestId('current-screen')).toHaveTextContent('Loan details');
+    expect(screen.getByTestId('loan-details-screen')).toBeInTheDocument();
   });
 });

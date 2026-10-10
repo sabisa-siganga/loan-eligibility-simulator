@@ -1,0 +1,155 @@
+.card {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+  padding: var(--space-5);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  background: var(--color-surface);
+}
+
+.monthlyLabel {
+  margin: 0;
+  color: var(--color-text-muted);
+  font-weight: 600;
+}
+
+.monthlyValue {
+  margin: var(--space-1) 0 0;
+  font-size: 2rem;
+  font-weight: 700;
+  line-height: 1.2;
+  color: var(--color-primary);
+}
+
+.rateNote {
+  margin: var(--space-2) 0 0;
+  color: var(--color-text-muted);
+}
+
+.placeholder {
+  margin: 0;
+  color: var(--color-text-muted);
+}
+
+.rows {
+  margin: 0;
+  display: grid;
+  gap: var(--space-3);
+}
+
+.row {
+  display: flex;
+  justify-content: space-between;
+  gap: var(--space-3);
+  margin: 0;
+}
+
+.row dt {
+  color: var(--color-text-muted);
+  font-weight: 400;
+}
+
+.row dd {
+  margin: 0;
+  font-weight: 600;
+  text-align: right;
+}
+
+.accordion {
+  border-top: 1px solid var(--color-border);
+}
+
+.accordionButton {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  min-height: var(--control-min-height);
+  padding: var(--space-3) 0;
+  border: none;
+  background: transparent;
+  color: var(--color-text);
+  font-weight: 600;
+  cursor: pointer;
+  text-align: left;
+}
+
+.accordionPanel {
+  padding: 0 0 var(--space-4);
+  color: var(--color-text-muted);
+}
+
+.exploreControls {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+
+.exploreLabel {
+  font-weight: 600;
+  color: var(--color-text);
+}
+
+.exploreValue {
+  font-weight: 700;
+  color: var(--color-primary);
+}
+
+.slider {
+  width: 100%;
+  accent-color: var(--color-primary);
+  min-height: auto;
+}
+
+.exploreActions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-3);
+  align-items: center;
+}
+
+.restoreButton {
+  min-height: auto;
+  padding: 0;
+  border: none;
+  background: transparent;
+  color: var(--color-primary);
+  font-weight: 600;
+  cursor: pointer;
+  text-decoration: underline;
+}
+
+.footnote {
+  margin: 0;
+  color: var(--color-text-muted);
+}
+
+.infoBanner {
+  display: flex;
+  gap: var(--space-3);
+  align-items: flex-start;
+  padding: var(--space-3) var(--space-4);
+  border-radius: var(--radius-sm);
+  background: #eaf1fe;
+  color: var(--color-text);
+}
+
+.continue {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-2);
+  width: 100%;
+  min-height: 3.1429rem;
+  border: none;
+  border-radius: var(--radius-sm);
+  background: var(--color-primary);
+  color: var(--color-surface);
+  font-weight: 700;
+  cursor: pointer;
+
+  &:hover {
+    background: var(--color-primary-hover);
+  }
+}
