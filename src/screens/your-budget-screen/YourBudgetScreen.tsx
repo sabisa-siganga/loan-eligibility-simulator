@@ -3,8 +3,9 @@ import { Controller, useForm, useWatch } from 'react-hook-form';
 import type { Resolver } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { AlertCircle, ArrowRight, Calculator, Shield, User } from 'lucide-react';
-import { Checkbox } from '../../components/ui/checkbox';
 import MoneyInput from '../../components/money-input';
+import { Button } from '../../components/ui/button';
+import { Checkbox } from '../../components/ui/checkbox';
 import { Select } from '../../components/ui/select';
 import WholeNumberInput from '../../components/whole-number-input';
 import { checkEligibility } from '../../services/eligibility';
@@ -270,15 +271,15 @@ const YourBudgetScreen = () => {
             <p className={styles.errorBannerHeading}>Check could not finish</p>
             <p className={styles.errorBannerText}>{eligibilityError}</p>
           </div>
-          <button
-            type="button"
+          <Button
+            variant="secondary"
             className={styles.tryAgain}
             onClick={() => {
               void handleSubmit(onValidSubmit, onInvalidSubmit)();
             }}
           >
             Try again
-          </button>
+          </Button>
         </div>
       ) : null}
 
@@ -565,15 +566,15 @@ const YourBudgetScreen = () => {
 
         <div className={styles.actions}>
           <div className={styles.secondaryActions}>
-            <button type="button" className={styles.linkButton} onClick={onBack}>
+            <Button variant="link" onClick={onBack}>
               Back
-            </button>
-            <button type="button" className={styles.linkButton} onClick={onCancel}>
+            </Button>
+            <Button variant="link" onClick={onCancel}>
               Cancel
-            </button>
+            </Button>
           </div>
           <div className={styles.primaryGroup}>
-            <button type="submit" className={styles.primaryButton} disabled={isChecking}>
+            <Button type="submit" className={styles.primaryButton} disabled={isChecking}>
               {isChecking ? (
                 <>
                   <span className={styles.spinner} aria-hidden="true" />
@@ -585,7 +586,7 @@ const YourBudgetScreen = () => {
                   <ArrowRight size={18} aria-hidden="true" />
                 </>
               )}
-            </button>
+            </Button>
             <p className={styles.footnote}>Includes interest; excludes fees and insurance.</p>
           </div>
         </div>

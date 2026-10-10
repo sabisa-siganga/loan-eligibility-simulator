@@ -206,7 +206,6 @@
 }
 
 .restoreButton {
-  @include button-text;
   min-height: auto;
   font-weight: 600;
 }
@@ -225,6 +224,5 @@
 }
 
 .continue {
-  @include button-primary;
   width: 100%;
 }

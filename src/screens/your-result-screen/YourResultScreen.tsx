@@ -1,6 +1,7 @@
 import { useEffect, useId, useMemo, useRef, useState } from 'react';
 import { AlertTriangle, Check, ChevronDown, Info, X } from 'lucide-react';
 import LinkedSliderField from '../../components/linked-slider-field';
+import { Button } from '../../components/ui/button';
 import { useAppDispatch, useAppSelector } from '../../store/hooks';
 import {
   editBudgetDetails,
@@ -137,13 +138,9 @@ const YourResultScreen = () => {
     return (
       <section className={styles.screen} data-testid="your-result-screen">
         <p>Result details are unavailable. Start again to check a loan.</p>
-        <button
-          type="button"
-          className={styles.startAgain}
-          onClick={() => dispatch(resetJourney())}
-        >
+        <Button variant="link" onClick={() => dispatch(resetJourney())}>
           Start again
-        </button>
+        </Button>
       </section>
     );
   }
@@ -409,20 +406,12 @@ const YourResultScreen = () => {
       </div>
 
       <div className={styles.actions}>
-        <button
-          type="button"
-          className={styles.editButton}
-          onClick={() => dispatch(editBudgetDetails())}
-        >
+        <Button variant="secondary" onClick={() => dispatch(editBudgetDetails())}>
           Edit your details
-        </button>
-        <button
-          type="button"
-          className={styles.startAgain}
-          onClick={() => dispatch(resetJourney())}
-        >
+        </Button>
+        <Button variant="link" onClick={() => dispatch(resetJourney())}>
           Start again
-        </button>
+        </Button>
       </div>
     </section>
   );

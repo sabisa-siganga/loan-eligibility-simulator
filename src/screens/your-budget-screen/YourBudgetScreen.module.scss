@@ -65,7 +65,6 @@
 }
 
 .tryAgain {
-  @include button-secondary;
   flex-shrink: 0;
 }
 
@@ -207,10 +206,6 @@
   gap: $space-5;
 }
 
-.linkButton {
-  @include button-text;
-}
-
 .primaryGroup {
   display: flex;
   flex-direction: column;
@@ -219,7 +214,6 @@
 }
 
 .primaryButton {
-  @include button-primary;
   min-width: 16rem;
 }
 
