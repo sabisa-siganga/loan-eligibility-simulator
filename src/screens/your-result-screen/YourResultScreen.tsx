@@ -2,7 +2,11 @@ import { useEffect, useId, useMemo, useRef, useState } from 'react';
 import { AlertTriangle, Check, ChevronDown, Info, X } from 'lucide-react';
 import LinkedSliderField from '../../components/linked-slider-field';
 import { useAppDispatch, useAppSelector } from '../../store/hooks';
-import { editBudgetDetails, resetJourney, updateSubmittedLoanDetails } from '../../store/journeySlice';
+import {
+  editBudgetDetails,
+  resetJourney,
+  updateSubmittedLoanDetails,
+} from '../../store/journeySlice';
 import {
   selectDemoCreditScore,
   selectSubmittedBudget,

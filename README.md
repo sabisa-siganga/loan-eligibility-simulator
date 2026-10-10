@@ -34,6 +34,8 @@ Open the URL printed in the terminal (usually `http://localhost:5173`).
 | `npm run build`        | Production build               |
 | `npm run preview`      | Preview the production build   |
 
+GitHub Actions runs `typecheck`, `lint`, `format:check`, `test`, and `build` on every pull request and on pushes to `main` (job name: **Quality**). After the workflow has run once, configure a branch ruleset on `main` that requires a pull request and the **Quality** status check (0 approving reviews).
+
 ## Confirmed starting values
 
 Screen 1 uses these defaults on load and after Cancel / Start again / reload:
