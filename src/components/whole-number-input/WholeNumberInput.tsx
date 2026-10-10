@@ -17,10 +17,31 @@ type WholeNumberInputProps = {
   required?: boolean;
   name?: string;
   id?: string;
+  type?: 'text' | 'number';
+  min?: number;
+  max?: number;
+  step?: number;
 };
 
 const WholeNumberInput = forwardRef<HTMLInputElement, WholeNumberInputProps>(
-  ({ label, value, onChange, onBlur, error, helperText, required = false, name, id }, ref) => {
+  (
+    {
+      label,
+      value,
+      onChange,
+      onBlur,
+      error,
+      helperText,
+      required = false,
+      name,
+      id,
+      type = 'text',
+      min,
+      max,
+      step,
+    },
+    ref,
+  ) => {
     const generatedId = useId();
     const inputId = id ?? generatedId;
     const errorId = `${inputId}-error`;
@@ -78,6 +99,10 @@ const WholeNumberInput = forwardRef<HTMLInputElement, WholeNumberInputProps>(
           ref={ref}
           id={inputId}
           name={name}
+          type={type}
+          min={type === 'number' ? min : undefined}
+          max={type === 'number' ? max : undefined}
+          step={type === 'number' ? step : undefined}
           inputMode="numeric"
           autoComplete="off"
           value={value === null ? '' : String(value)}

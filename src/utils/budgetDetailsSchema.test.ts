@@ -2,6 +2,8 @@ import { describe, expect, it } from 'vitest';
 import { emptyBudgetFormValues } from '../types/budget';
 import { budgetDetailsFormSchema } from './budgetDetailsSchema';
 
+const AGE_RANGE_MESSAGE = 'You must be between 18 and 65 years old.';
+
 const validBase = {
   ...emptyBudgetFormValues(),
   monthlyIncome: 15_000,
@@ -13,6 +15,18 @@ const validBase = {
   creditScore: 650,
 };
 
+const ageIssueMessage = (age: unknown) => {
+  const result = budgetDetailsFormSchema.safeParse({
+    ...validBase,
+    age,
+  });
+  expect(result.success).toBe(false);
+  if (result.success) {
+    return undefined;
+  }
+  return result.error.issues.find((issue) => issue.path[0] === 'age')?.message;
+};
+
 describe('budgetDetailsFormSchema', () => {
   it('accepts a valid employed submission with a manual credit score', () => {
     const result = budgetDetailsFormSchema.safeParse(validBase);
@@ -22,6 +36,29 @@ describe('budgetDetailsFormSchema', () => {
       expect(result.data.incomeSource).toBeNull();
       expect(result.data.creditScore).toBe(650);
     }
+  });
+
+  it('accepts ages at the inclusive 18 and 65 bounds', () => {
+    expect(budgetDetailsFormSchema.safeParse({ ...validBase, age: 18 }).success).toBe(true);
+    expect(budgetDetailsFormSchema.safeParse({ ...validBase, age: 65 }).success).toBe(true);
+  });
+
+  it('rejects ages below 18 and above 65 with the range message', () => {
+    expect(ageIssueMessage(17)).toBe(AGE_RANGE_MESSAGE);
+    expect(ageIssueMessage(66)).toBe(AGE_RANGE_MESSAGE);
+  });
+
+  it('rejects ages that used to pass the old 1 to 120 form window', () => {
+    expect(ageIssueMessage(1)).toBe(AGE_RANGE_MESSAGE);
+    expect(ageIssueMessage(120)).toBe(AGE_RANGE_MESSAGE);
+  });
+
+  it('rejects an empty age with Enter your age', () => {
+    expect(ageIssueMessage(null)).toBe('Enter your age.');
+  });
+
+  it('rejects a non-integer age with the whole-number message', () => {
+    expect(ageIssueMessage(18.5)).toBe('Enter a whole number of years.');
   });
 
   it('requires employment duration only for employed users', () => {

@@ -8,6 +8,9 @@ import {
   type IncomeSource,
   type SubmittedBudget,
 } from '../types/budget';
+import { POLICY_THRESHOLDS } from './policyThresholds';
+
+const AGE_RANGE_MESSAGE = 'You must be between 18 and 65 years old.';
 
 const employmentValues = EMPLOYMENT_STATUSES as unknown as [
   EmploymentStatus,
@@ -53,7 +56,11 @@ export const budgetDetailsFormSchema = z
       'Enter whole rands only.',
     ).pipe(z.number().int().min(0, 'Enter your existing monthly debt repayments.')),
     age: requiredInt('Enter your age.', 'Enter a whole number of years.').pipe(
-      z.number().int().min(1, 'Enter your age.').max(120, 'Enter a valid age.'),
+      z
+        .number()
+        .int()
+        .min(POLICY_THRESHOLDS.minAge, AGE_RANGE_MESSAGE)
+        .max(POLICY_THRESHOLDS.maxAge, AGE_RANGE_MESSAGE),
     ),
     employmentStatus: employmentStatusSchema,
     employmentDurationMonths: optionalInt,
