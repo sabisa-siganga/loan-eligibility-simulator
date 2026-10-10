@@ -1,6 +1,6 @@
 import { forwardRef, useId } from 'react';
 import type { ChangeEvent, ClipboardEvent, KeyboardEvent } from 'react';
-import { isWholeRandDigitString, sanitizeMoneyPaste } from '../utils/formatMoney';
+import { isWholeRandDigitString, sanitizeMoneyPaste } from '../../utils/formatMoney';
 import styles from './WholeNumberInput.module.scss';
 
 type WholeNumberInputProps = {

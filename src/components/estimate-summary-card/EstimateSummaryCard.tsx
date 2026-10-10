@@ -1,8 +1,8 @@
 import { useId, useState } from 'react';
 import { ArrowRight, ChevronDown, ChevronUp, Info } from 'lucide-react';
-import type { RepaymentEstimate } from '../types/loan';
-import { formatMoneyDisplay, formatTermLabel } from '../utils/formatMoney';
-import { PRODUCT_SETTINGS } from '../utils/productSettings';
+import type { RepaymentEstimate } from '../../types/loan';
+import { formatMoneyDisplay, formatTermLabel } from '../../utils/formatMoney';
+import { PRODUCT_SETTINGS } from '../../utils/productSettings';
 import styles from './EstimateSummaryCard.module.scss';
 
 type EstimateSummaryCardProps = {

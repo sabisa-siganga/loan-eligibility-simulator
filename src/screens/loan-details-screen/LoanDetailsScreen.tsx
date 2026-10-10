@@ -1,20 +1,20 @@
 import { useMemo, useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import EstimateSummaryCard from '../components/EstimateSummaryCard';
-import LinkedSliderField from '../components/LinkedSliderField';
-import SelectField from '../components/SelectField';
-import { useAppDispatch, useAppSelector } from '../store/hooks';
-import { submitLoanDetails } from '../store/journeySlice';
-import { selectSubmittedLoanDetails } from '../store/journeySelectors';
-import { LOAN_PURPOSE_LABELS, LOAN_PURPOSES } from '../types/loan';
-import { calculateRepayment, isValidLoanEstimateInput } from '../utils/calculateRepayment';
+import EstimateSummaryCard from '../../components/estimate-summary-card';
+import LinkedSliderField from '../../components/linked-slider-field';
+import SelectField from '../../components/select-field';
+import { useAppDispatch, useAppSelector } from '../../store/hooks';
+import { submitLoanDetails } from '../../store/journeySlice';
+import { selectSubmittedLoanDetails } from '../../store/journeySelectors';
+import { LOAN_PURPOSE_LABELS, LOAN_PURPOSES } from '../../types/loan';
+import { calculateRepayment, isValidLoanEstimateInput } from '../../utils/calculateRepayment';
 import {
   loanDetailsFormSchema,
   type LoanDetailsFormInput,
   type LoanDetailsFormValues,
-} from '../utils/loanDetailsSchema';
-import { PRODUCT_SETTINGS } from '../utils/productSettings';
+} from '../../utils/loanDetailsSchema';
+import { PRODUCT_SETTINGS } from '../../utils/productSettings';
 import styles from './LoanDetailsScreen.module.scss';
 
 const purposeOptions = LOAN_PURPOSES.map((value) => ({

@@ -2,10 +2,10 @@ import { cleanup, fireEvent, render, screen, within } from '@testing-library/rea
 import userEvent from '@testing-library/user-event';
 import { Provider } from 'react-redux';
 import { afterEach, describe, expect, it } from 'vitest';
-import App from '../App';
-import { createAppStore } from '../store/store';
-import { formatMoneyInputBlur } from '../utils/formatMoney';
-import { PRODUCT_SETTINGS } from '../utils/productSettings';
+import App from '../../App';
+import { createAppStore } from '../../store/store';
+import { formatMoneyInputBlur } from '../../utils/formatMoney';
+import { PRODUCT_SETTINGS } from '../../utils/productSettings';
 
 afterEach(() => {
   cleanup();

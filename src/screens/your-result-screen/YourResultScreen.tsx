@@ -1,16 +1,16 @@
 import { useEffect, useId, useMemo, useState } from 'react';
 import { AlertTriangle, CheckCircle2, ChevronDown, ChevronUp, Info, XCircle } from 'lucide-react';
-import LinkedSliderField from '../components/LinkedSliderField';
-import { useAppDispatch, useAppSelector } from '../store/hooks';
-import { editBudgetDetails, resetJourney, updateSubmittedLoanDetails } from '../store/journeySlice';
+import LinkedSliderField from '../../components/linked-slider-field';
+import { useAppDispatch, useAppSelector } from '../../store/hooks';
+import { editBudgetDetails, resetJourney, updateSubmittedLoanDetails } from '../../store/journeySlice';
 import {
   selectDemoCreditScore,
   selectSubmittedBudget,
   selectSubmittedLoanDetails,
-} from '../store/journeySelectors';
-import { deriveResultViewModel } from '../utils/deriveResultViewModel';
-import { isValidLoanEstimateInput } from '../utils/calculateRepayment';
-import { PRODUCT_SETTINGS } from '../utils/productSettings';
+} from '../../store/journeySelectors';
+import { deriveResultViewModel } from '../../utils/deriveResultViewModel';
+import { isValidLoanEstimateInput } from '../../utils/calculateRepayment';
+import { PRODUCT_SETTINGS } from '../../utils/productSettings';
 import styles from './YourResultScreen.module.scss';
 
 const YourResultScreen = () => {

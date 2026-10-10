@@ -1,10 +1,10 @@
 import { useState } from 'react';
-import AppHeader from './components/AppHeader';
-import HowItWorksDialog from './components/HowItWorksDialog';
-import ProgressStepper from './components/ProgressStepper';
-import LoanDetailsScreen from './screens/LoanDetailsScreen';
-import YourBudgetScreen from './screens/YourBudgetScreen';
-import YourResultScreen from './screens/YourResultScreen';
+import AppHeader from './components/app-header';
+import HowItWorksDialog from './components/how-it-works-dialog';
+import ProgressStepper from './components/progress-stepper';
+import LoanDetailsScreen from './screens/loan-details-screen';
+import YourBudgetScreen from './screens/your-budget-screen';
+import YourResultScreen from './screens/your-result-screen';
 import { useAppSelector } from './store/hooks';
 import { JOURNEY_SCREENS } from './store/journeySlice';
 import { selectCurrentScreen } from './store/journeySelectors';

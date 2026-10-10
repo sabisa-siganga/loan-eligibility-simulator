@@ -3,19 +3,19 @@ import { Controller, useForm, useWatch } from 'react-hook-form';
 import type { Resolver } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { ArrowRight, Calculator, Shield, User } from 'lucide-react';
-import CheckboxField from '../components/CheckboxField';
-import MoneyInput from '../components/MoneyInput';
-import SelectField from '../components/SelectField';
-import WholeNumberInput from '../components/WholeNumberInput';
-import { checkEligibility } from '../services/eligibility';
-import { useAppDispatch, useAppSelector } from '../store/hooks';
+import CheckboxField from '../../components/checkbox-field';
+import MoneyInput from '../../components/money-input';
+import SelectField from '../../components/select-field';
+import WholeNumberInput from '../../components/whole-number-input';
+import { checkEligibility } from '../../services/eligibility';
+import { useAppDispatch, useAppSelector } from '../../store/hooks';
 import {
   eligibilityFailed,
   eligibilitySucceeded,
   goBackToLoanDetails,
   resetJourney,
   submitBudgetAndStartCheck,
-} from '../store/journeySlice';
+} from '../../store/journeySlice';
 import {
   selectBudgetDraft,
   selectDemoCreditScore,
@@ -23,7 +23,7 @@ import {
   selectEligibilityRequestId,
   selectEligibilityStatus,
   selectSubmittedLoanDetails,
-} from '../store/journeySelectors';
+} from '../../store/journeySelectors';
 import {
   EMPLOYMENT_STATUSES,
   EMPLOYMENT_STATUS_LABELS,
@@ -33,14 +33,14 @@ import {
   INCOME_SOURCES_REQUIRING_DURATION,
   type BudgetFormInput,
   type IncomeSource,
-} from '../types/budget';
-import { LOAN_PURPOSE_LABELS } from '../types/loan';
+} from '../../types/budget';
+import { LOAN_PURPOSE_LABELS } from '../../types/loan';
 import {
   budgetDetailsFormSchema,
   type BudgetDetailsFormValues,
-} from '../utils/budgetDetailsSchema';
-import { pickDemoCreditScore } from '../utils/demoCreditScore';
-import { formatMoneyDisplay } from '../utils/formatMoney';
+} from '../../utils/budgetDetailsSchema';
+import { pickDemoCreditScore } from '../../utils/demoCreditScore';
+import { formatMoneyDisplay } from '../../utils/formatMoney';
 import styles from './YourBudgetScreen.module.scss';
 
 const employmentOptions = EMPLOYMENT_STATUSES.map((value) => ({

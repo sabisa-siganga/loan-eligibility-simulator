@@ -2,11 +2,11 @@ import { act, cleanup, render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { Provider } from 'react-redux';
 import { afterEach, describe, expect, it, vi } from 'vitest';
-import App from '../App';
-import { createAppStore } from '../store/store';
-import { JOURNEY_SCREENS, setCurrentScreen, submitLoanDetails } from '../store/journeySlice';
-import { emptyBudgetFormValues } from '../types/budget';
-import * as eligibilityService from '../services/eligibility';
+import App from '../../App';
+import { createAppStore } from '../../store/store';
+import { JOURNEY_SCREENS, setCurrentScreen, submitLoanDetails } from '../../store/journeySlice';
+import { emptyBudgetFormValues } from '../../types/budget';
+import * as eligibilityService from '../../services/eligibility';
 
 afterEach(() => {
   cleanup();

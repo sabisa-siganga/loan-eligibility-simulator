@@ -2,15 +2,15 @@ import { cleanup, fireEvent, render, screen, within } from '@testing-library/rea
 import userEvent from '@testing-library/user-event';
 import { Provider } from 'react-redux';
 import { afterEach, describe, expect, it } from 'vitest';
-import App from '../App';
-import { createAppStore } from '../store/store';
+import App from '../../App';
+import { createAppStore } from '../../store/store';
 import {
   eligibilitySucceeded,
   JOURNEY_SCREENS,
   submitBudgetAndStartCheck,
   submitLoanDetails,
-} from '../store/journeySlice';
-import type { SubmittedBudget } from '../types/budget';
+} from '../../store/journeySlice';
+import type { SubmittedBudget } from '../../types/budget';
 
 afterEach(() => {
   cleanup();

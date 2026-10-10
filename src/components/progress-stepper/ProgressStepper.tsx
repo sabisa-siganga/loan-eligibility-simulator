@@ -1,5 +1,5 @@
 import { Check } from 'lucide-react';
-import { JOURNEY_SCREENS, JOURNEY_SCREEN_LABELS, type JourneyScreen } from '../store/journeySlice';
+import { JOURNEY_SCREENS, JOURNEY_SCREEN_LABELS, type JourneyScreen } from '../../store/journeySlice';
 import styles from './ProgressStepper.module.scss';
 
 const STEPS: JourneyScreen[] = [

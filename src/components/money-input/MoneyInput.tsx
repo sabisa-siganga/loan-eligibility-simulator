@@ -6,7 +6,7 @@ import {
   isWholeRandDigitString,
   parseWholeRandDigits,
   sanitizeMoneyPaste,
-} from '../utils/formatMoney';
+} from '../../utils/formatMoney';
 import styles from './MoneyInput.module.scss';
 
 type MoneyInputProps = {
