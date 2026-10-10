@@ -5,7 +5,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { AlertCircle, ArrowRight, Calculator, Shield, User } from 'lucide-react';
 import { Checkbox } from '../../components/ui/checkbox';
 import MoneyInput from '../../components/money-input';
-import SelectField from '../../components/select-field';
+import { Select } from '../../components/ui/select';
 import WholeNumberInput from '../../components/whole-number-input';
 import { checkEligibility } from '../../services/eligibility';
 import { useAppDispatch, useAppSelector } from '../../store/hooks';
@@ -373,7 +373,7 @@ const YourBudgetScreen = () => {
                 name="employmentStatus"
                 control={control}
                 render={({ field, fieldState }) => (
-                  <SelectField
+                  <Select
                     ref={field.ref}
                     label="Employment status"
                     name={field.name}
@@ -439,7 +439,7 @@ const YourBudgetScreen = () => {
                   name="incomeSource"
                   control={control}
                   render={({ field, fieldState }) => (
-                    <SelectField
+                    <Select
                       ref={field.ref}
                       label="Income source"
                       name={field.name}

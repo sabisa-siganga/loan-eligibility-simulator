@@ -1,14 +1,17 @@
 import { forwardRef, useId } from 'react';
 import type { ChangeEvent } from 'react';
 import { ChevronDown, Info } from 'lucide-react';
-import styles from './SelectField.module.scss';
+import { ErrorText } from '../error-text';
+import { HelperText } from '../helper-text';
+import { Label } from '../label';
+import styles from './Select.module.scss';
 
 export type SelectOption = {
   value: string;
   label: string;
 };
 
-type SelectFieldProps = {
+export type SelectProps = {
   label: string;
   value: string;
   options: SelectOption[];
@@ -22,7 +25,7 @@ type SelectFieldProps = {
   id?: string;
 };
 
-const SelectField = forwardRef<HTMLSelectElement, SelectFieldProps>(
+export const Select = forwardRef<HTMLSelectElement, SelectProps>(
   (
     {
       label,
@@ -50,15 +53,9 @@ const SelectField = forwardRef<HTMLSelectElement, SelectFieldProps>(
 
     return (
       <div className={styles.field}>
-        <label className={styles.label} htmlFor={selectId}>
+        <Label htmlFor={selectId} required={required}>
           {label}
-          {required ? (
-            <span className={styles.required} aria-hidden="true">
-              {' '}
-              *
-            </span>
-          ) : null}
-        </label>
+        </Label>
         <div className={styles.selectWrap}>
           <select
             ref={ref}
@@ -87,21 +84,15 @@ const SelectField = forwardRef<HTMLSelectElement, SelectFieldProps>(
           <ChevronDown className={styles.chevron} size={18} aria-hidden="true" />
         </div>
         {helperText ? (
-          <p id={helperId} className={styles.helper}>
+          <HelperText id={helperId}>
             <Info size={16} aria-hidden="true" />
             <span>{helperText}</span>
-          </p>
+          </HelperText>
         ) : null}
-        {error ? (
-          <p id={errorId} className={styles.error} role="alert">
-            {error}
-          </p>
-        ) : null}
+        {error ? <ErrorText id={errorId}>{error}</ErrorText> : null}
       </div>
     );
   },
 );
 
-SelectField.displayName = 'SelectField';
-
-export default SelectField;
+Select.displayName = 'Select';
