@@ -50,9 +50,7 @@ describe('calculateRepayment', () => {
   });
 
   it('returns zeroed figures when principal, term, or rate is invalid', () => {
-    expect(
-      calculateRepayment({ principal: 0, termMonths: 12, annualRatePercent: 12.5 }),
-    ).toEqual({
+    expect(calculateRepayment({ principal: 0, termMonths: 12, annualRatePercent: 12.5 })).toEqual({
       monthlyPayment: 0,
       totalRepayment: 0,
       totalInterest: 0,

@@ -292,7 +292,9 @@ describe('YourBudgetScreen', () => {
     await user.click(screen.getByRole('button', { name: /Check estimated eligibility/i }));
 
     expect(await screen.findByText('Check could not finish')).toBeInTheDocument();
-    expect(screen.getByText(eligibilityService.ELIGIBILITY_CHECK_FAILED_MESSAGE)).toBeInTheDocument();
+    expect(
+      screen.getByText(eligibilityService.ELIGIBILITY_CHECK_FAILED_MESSAGE),
+    ).toBeInTheDocument();
 
     await user.click(screen.getByRole('button', { name: /Try again/i }));
     expect(await screen.findByTestId('your-result-screen')).toBeInTheDocument();
@@ -324,7 +326,9 @@ describe('YourBudgetScreen', () => {
     await user.click(screen.getByRole('button', { name: /Check estimated eligibility/i }));
 
     expect(await screen.findByText('Check could not finish')).toBeInTheDocument();
-    expect(screen.getByText(eligibilityService.ELIGIBILITY_CHECK_FAILED_MESSAGE)).toBeInTheDocument();
+    expect(
+      screen.getByText(eligibilityService.ELIGIBILITY_CHECK_FAILED_MESSAGE),
+    ).toBeInTheDocument();
   });
 
   it('ignores an aborted eligibility request without showing a failure banner', async () => {

@@ -4,9 +4,12 @@ import react from '@vitejs/plugin-react';
 import { defineConfig } from 'vitest/config';
 
 // Normalize Windows drive-letter casing so v8 coverage does not double-count files.
-const root = fileURLToPath(new URL('.', import.meta.url)).replace(/^([A-Z]):/, (_, drive: string) => {
-  return `${drive.toLowerCase()}:`;
-});
+const root = fileURLToPath(new URL('.', import.meta.url)).replace(
+  /^([A-Z]):/,
+  (_, drive: string) => {
+    return `${drive.toLowerCase()}:`;
+  },
+);
 
 export default defineConfig({
   root,

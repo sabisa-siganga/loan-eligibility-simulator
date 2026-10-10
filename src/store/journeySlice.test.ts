@@ -48,9 +48,7 @@ describe('journeySlice', () => {
     const requestId = store.getState().journey.eligibilityRequestId;
 
     store.dispatch(eligibilitySucceeded({ requestId: requestId + 1 }));
-    store.dispatch(
-      eligibilityFailed({ requestId: requestId + 1, message: 'stale failure' }),
-    );
+    store.dispatch(eligibilityFailed({ requestId: requestId + 1, message: 'stale failure' }));
 
     expect(store.getState().journey.eligibilityStatus).toBe('checking');
     expect(store.getState().journey.eligibilityError).toBeNull();
@@ -69,7 +67,10 @@ describe('journeySlice', () => {
     const requestId = store.getState().journey.eligibilityRequestId;
 
     store.dispatch(
-      eligibilityFailed({ requestId, message: 'We could not check eligibility. Please try again.' }),
+      eligibilityFailed({
+        requestId,
+        message: 'We could not check eligibility. Please try again.',
+      }),
     );
 
     expect(store.getState().journey.eligibilityStatus).toBe('failed');

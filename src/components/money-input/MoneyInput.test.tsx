@@ -80,9 +80,7 @@ describe('MoneyInput', () => {
     const onChange = vi.fn();
     const onBlur = vi.fn();
 
-    render(
-      <MoneyInput label="Monthly income" value={null} onChange={onChange} onBlur={onBlur} />,
-    );
+    render(<MoneyInput label="Monthly income" value={null} onChange={onChange} onBlur={onBlur} />);
 
     const input = screen.getByRole('textbox', { name: /Monthly income/i });
     await user.type(input, '3400');

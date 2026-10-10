@@ -40,9 +40,7 @@ test.describe('Loan details screen', () => {
     await page.getByRole('button', { name: /Continue to your budget/i }).click();
 
     await expect(page.getByText('Enter a loan amount.')).toBeVisible();
-    await expect(
-      page.getByText('Enter a valid amount and term to see an estimate.'),
-    ).toBeVisible();
+    await expect(page.getByText('Enter a valid amount and term to see an estimate.')).toBeVisible();
     await expect(page.getByTestId('loan-details-screen')).toBeVisible();
   });
 
